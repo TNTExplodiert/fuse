@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- Nichts von fremden Servern: keine Schriften, keine Skripte, kein Tracking. -->
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self'; style-src 'self'; script-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'">
+  <meta name="referrer" content="strict-origin-when-cross-origin">
+  <title>FUSE</title>
+  <meta name="description" content="FUSE ist ein kostenloser Minecraft-Launcher für Windows 10/11: Vanilla, Fabric, Quilt, Forge und NeoForge, Mods direkt von Modrinth, Instanzen und eigenes Java. Nicht offiziell. Nicht von Mojang oder Microsoft.">
+  <meta name="author" content="TNTExplodiert">
+  <meta name="theme-color" content="#0d0f13">
+  <meta name="color-scheme" content="dark">
+
+  <meta property="og:type" content="website">
+  <meta property="og:locale" content="de_DE">
+  <meta property="og:site_name" content="FUSE">
+  <meta property="og:title" content="FUSE – Minecraft-Launcher für Windows">
+  <meta property="og:description" content="Kostenlos für Windows 10/11. Vanilla, Fabric, Quilt, Forge und NeoForge, Mods direkt von Modrinth, Instanzen und eigenes Java. Nicht offiziell. Nicht von Mojang oder Microsoft.">
+  <meta property="og:image" content="https://tntexplodiert.github.io/fuse/bilder/og-bild.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="FUSE-Logo und ein Bild des Launchers mit dem roten SPIELEN-Knopf">
+  <meta name="twitter:card" content="summary_large_image">
+
+  <link rel="icon" href="favicon.ico" sizes="32x32">
+  <link rel="icon" href="icon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+  <link rel="stylesheet" href="stil.css">
+</head>
+<body>
+  <a class="sprung" href="#inhalt">Zum Inhalt springen</a>
+
+  <header class="leiste">
+    <div class="huelle leiste-innen">
+      <a class="marke" href="#inhalt">
+        <img src="icon.svg" width="28" height="28" alt="">
+        <span>FUSE</span>
+      </a>
+      <nav aria-label="Bereiche der Seite">
+        <ul>
+          <li class="nur-breit"><a href="#funktionen">Funktionen</a></li>
+          <li><a href="#so-gehts">So geht’s</a></li>
+          <li>
+            <a href="https://github.com/TNTExplodiert/fuse">GitHub
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M9 7h8v8"/></svg>
+            </a>
+          </li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main id="inhalt">
+    <div class="huelle">
+
+      <section class="held" aria-labelledby="titel">
+        <img class="held-logo" src="icon.svg" width="88" height="88" alt="FUSE-Logo: ein weißer Blitz auf rotem Grund">
+        <p class="etikett">Minecraft-Launcher für Windows</p>
+        <h1 id="titel">FUSE</h1>
+        <p class="einleitung">
+          Version wählen, Loader wählen, <strong>SPIELEN</strong> drücken.
+          Minecraft, Java und Loader holt FUSE selbst – und Mods suchst du dir
+          direkt bei Modrinth aus.
+        </p>
+        <div class="knoepfe">
+          <a class="knopf knopf-haupt" href="https://github.com/TNTExplodiert/fuse/releases/latest">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12M7 10l5 5 5-5M5 21h14"/></svg>
+            Herunterladen
+          </a>
+          <a class="knopf knopf-zweit" href="https://github.com/TNTExplodiert/fuse">Auf GitHub ansehen</a>
+        </div>
+        <p class="hinweis-klein">Windows 10/11 · kostenlos · von TNTExplodiert</p>
+        <p class="nicht-offiziell">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8h.01"/></svg>
+          <strong>Nicht offiziell. Nicht von Mojang oder Microsoft.</strong>
+        </p>
+      </section>
+
+      <figure class="buehne">
+        <div class="fenster">
+          <img src="bilder/start.webp"
+               srcset="bilder/start-800.webp 800w, bilder/start.webp 1612w"
+               sizes="(min-width: 1144px) 1080px, calc(100vw - 40px)"
+               width="1612" height="1076" fetchpriority="high"
+               alt="Das FUSE-Fenster: links die Seitenleiste, in der Mitte die Karte „Start vorbereiten“ mit Instanz „Standard“, Version 1.16.5 und Loader Forge, unten der große rote SPIELEN-Knopf.">
+        </div>
+        <figcaption>So sieht FUSE aus: Instanz, Version und Loader wählen – dann SPIELEN.</figcaption>
+      </figure>
+
+      <!-- Jede Karte ist gegen launcher/STAND.md („Was FUSE kann“ und die
+           Bau-Abschnitte) bzw. den Quelltext geprüft und steckt im Download
+           (Bau 74, gilt auch für Bau 75). Die Microsoft-Anmeldung steht
+           deshalb NICHT hier (azure_id ist im Download leer).
+           „Ohne Konto spielen“ steht bewusst nicht als Werbe-Karte hier,
+           sondern nur ehrlich unter „Was noch nicht geht“ (mit Kauf-Hinweis). -->
+      <section id="funktionen" class="abschnitt" aria-labelledby="funktionen-titel">
+        <div class="abschnitt-kopf">
+          <p class="etikett">Funktionen</p>
+          <h2 id="funktionen-titel">Was FUSE kann</h2>
+          <p>Alles hier steckt schon im aktuellen Download – nichts davon ist nur geplant.</p>
+        </div>
+
+        <ul class="karten">
+          <li class="karte">
+            <span class="symbol"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 4v16l13-8z"/></svg></span>
+            <h3>Mit Loader oder ohne</h3>
+            <p>Fabric, Quilt, Forge und NeoForge – oder ganz ohne (Vanilla). FUSE lädt Minecraft und richtet den Loader selbst ein.</p>
+            <p class="klein">Forge für 1.12.2 und älter sowie von 1.13.2 bis zu den 26er-Versionen, NeoForge ab 1.20.2.</p>
+          </li>
+          <li class="karte">
+            <span class="symbol"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9h12v5a5 5 0 0 1-5 5H9a5 5 0 0 1-5-5z"/><path d="M16 11h1.5a2.5 2.5 0 0 1 0 5H16"/><path d="M8 3c0 1.5 1.5 1.5 1.5 3M12 3c0 1.5 1.5 1.5 1.5 3"/></svg></span>
+            <h3>Java kommt mit</h3>
+            <p>Du musst kein Java installieren. FUSE holt für jede Minecraft-Version genau das Java, das sie braucht.</p>
+          </li>
+          <li class="karte">
+            <span class="symbol"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2.5 3.5 7v10l8.5 4.5 8.5-4.5V7z"/><path d="M3.5 7 12 11.5 20.5 7M12 11.5v10"/></svg></span>
+            <h3>Mods von Modrinth</h3>
+            <p>Mods, Texturenpakete und Shader direkt in FUSE suchen und installieren – mit Bildern, Beschreibungen und Updates auf Knopfdruck. Einzelne Mods kannst du auch einfach ausschalten.</p>
+          </li>
+          <li class="karte">
+            <span class="symbol"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><path d="M8 13h8"/></svg></span>
+            <h3>Ordnung bei den Mods</h3>
+            <p>Jede Version hat mit jedem Loader ihren eigenen Mod-Ordner. Wechselst du zwischen 1.20.1 und 1.21, kommen sich die Mods nicht in die Quere.</p>
+          </li>
+          <li class="karte">
+            <span class="symbol"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3 2.5 8 12 13l9.5-5z"/><path d="M2.5 12.5 12 17.5l9.5-5M2.5 16.5 12 21.5l9.5-5"/></svg></span>
+            <h3>Instanzen</h3>
+            <p>Eigene Welten, Mods und Einstellungen pro Instanz. Spieldateien und Java teilen sich alle – das spart Platz. Instanzen lassen sich auch duplizieren.</p>
+          </li>
+          <li class="karte">
+            <span class="symbol"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"/></svg></span>
+            <h3>Welten &amp; Backups</h3>
+            <p>Welten, Server und Screenshots auf einen Blick. Vor dem Start sichert FUSE deine Welten automatisch, wenn sich etwas geändert hat. Ab 1.20 geht’s mit einem Klick direkt in eine Welt.</p>
+          </li>
+          <li class="karte">
+            <span class="symbol"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="M8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2M3 12.5h18M10 12.5v2h4v-2"/></svg></span>
+            <h3>Modpacks</h3>
+            <p>Fabric-Modpacks direkt bei Modrinth suchen oder eine <code>.mrpack</code>-Datei öffnen – FUSE macht daraus eine neue Instanz.</p>
+          </li>
+          <li class="karte">
+            <span class="symbol"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></span>
+            <h3>Von neu bis uralt</h3>
+            <p>Alle Release-Versionen stehen in der Liste. Im <em>Experimental Mode</em> kommen Snapshots und die alten Alpha- und Beta-Versionen dazu.</p>
+          </li>
+          <li class="karte">
+            <span class="symbol"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 6h9M17 6h3M4 12h3M11 12h9M4 18h11M19 18h1"/><circle cx="15" cy="6" r="2"/><circle cx="9" cy="12" r="2"/><circle cx="17" cy="18" r="2"/></svg></span>
+            <h3>Grafik-Stufen</h3>
+            <p>In den Einstellungen <em>Niedrig</em>, <em>Mittel</em> oder <em>Hoch</em> wählen und anwenden – FUSE stellt die Grafik der Instanz passend ein. Deine Tasten und die Lautstärke bleiben, wie sie sind.</p>
+          </li>
+          <li class="karte">
+            <span class="symbol"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="6" width="20" height="12" rx="2"/><path d="M6 10h.01M10 10h.01M14 10h.01M18 10h.01M7 14h10"/></svg></span>
+            <h3>Geht auch ohne Maus</h3>
+            <p>WASD oder Pfeiltasten, Enter, Esc, Q und E: FUSE lässt sich auch nur mit der Tastatur bedienen.</p>
+          </li>
+          <li class="karte">
+            <span class="symbol"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 7h11l-3-3M17 17H6l3 3"/></svg></span>
+            <h3>Java &amp; Bedrock</h3>
+            <p>Ein Umschalter zwischen Java und Bedrock Edition. FUSE erkennt Bedrock und startet es über Windows – installieren oder modden kann FUSE Bedrock nicht.</p>
+          </li>
+          <li class="karte">
+            <span class="symbol"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 12a8 8 0 0 1-14.3 4.9M4 12a8 8 0 0 1 14.3-4.9"/><path d="M18.5 3v4.2h-4.2M5.5 21v-4.2h4.2"/></svg></span>
+            <h3>Aktualisiert sich selbst</h3>
+            <p>Neue Versionen von FUSE kommen über GitHub. Einmal in den Einstellungen die Quelle eintragen (siehe unten) – dann holt FUSE Updates selbst und spielt sie beim Schließen ein.</p>
+          </li>
+        </ul>
+
+        <div class="ausserdem">
+          <h3>Außerdem drin</h3>
+          <ul>
+            <li>Arbeitsspeicher, Fenstergröße und eigene Java-Argumente einstellen</li>
+            <li>Protokoll-Reiter: Meldungen gehen nicht verloren</li>
+            <li>Minecraft direkt aus FUSE heraus beenden</li>
+          </ul>
+        </div>
+      </section>
+
+      <section class="abschnitt" aria-labelledby="einblick-titel">
+        <div class="abschnitt-kopf">
+          <p class="etikett">Einblick</p>
+          <h2 id="einblick-titel">Einmal reingeschaut</h2>
+        </div>
+
+        <div class="einblick">
+          <div class="einblick-text">
+            <h3>Mods, Texturen, Shader</h3>
+            <p>
+              Suchen, auf <strong>Installieren</strong> drücken, fertig. Unter
+              <strong>Installiert</strong> siehst du deine Mods mit echtem Namen
+              und Bild – und kannst sie dort aus- und wieder einschalten.
+            </p>
+          </div>
+          <div class="einblick-bilder zwei">
+            <figure>
+              <div class="fenster">
+                <img src="bilder/mods-suche.webp"
+                     srcset="bilder/mods-suche-640.webp 640w, bilder/mods-suche.webp 1072w"
+                     sizes="(min-width: 1144px) 484px, (min-width: 720px) calc(50vw - 76px), calc(100vw - 76px)"
+                     width="1072" height="715" loading="lazy" decoding="async"
+                     alt="FUSE, Bereich Mods mit „Suchen“: eine Liste von Modrinth mit Fabric API, Sodium, Iris Shaders, Entity Culling und Cloth Config API, jeweils mit Downloadzahl und Knopf „Installieren“.">
+              </div>
+              <figcaption>Suchen bei Modrinth</figcaption>
+            </figure>
+            <figure>
+              <div class="fenster">
+                <img src="bilder/mods-installiert.webp"
+                     srcset="bilder/mods-installiert-640.webp 640w, bilder/mods-installiert.webp 1072w"
+                     sizes="(min-width: 1144px) 484px, (min-width: 720px) calc(50vw - 76px), calc(100vw - 76px)"
+                     width="1072" height="715" loading="lazy" decoding="async"
+                     alt="FUSE, Bereich Mods mit „Installiert“: installierte Mods wie Cloth Config API, Fabric API, Iris Shaders, Sodium und Xaeros Minimap, jeweils mit Knopf „Ausschalten“ und grünem Haken „Installiert“.">
+              </div>
+              <figcaption>Deine installierten Mods</figcaption>
+            </figure>
+          </div>
+        </div>
+
+        <div class="einblick einblick-schmal">
+          <div class="einblick-text">
+            <h3>Java oder Bedrock?</h3>
+            <p>
+              Noch ein Klick aufs Spiel-Symbol öffnet das Editions-Menü. Bei
+              Java hast du Mods, Instanzen und Versionen; Bedrock startet FUSE
+              einfach über Windows.
+            </p>
+          </div>
+          <div class="einblick-bilder">
+            <figure>
+              <div class="fenster fenster-klein">
+                <img src="bilder/edition-menue.webp" width="520" height="330"
+                     loading="lazy" decoding="async"
+                     alt="Ausschnitt aus FUSE: ein aufgeklapptes Menü mit „Java Edition – Mods, Instanzen, Versionen“ (ausgewählt) und „Bedrock Edition – Minecraft für Windows“.">
+              </div>
+              <figcaption>Das Editions-Menü</figcaption>
+            </figure>
+          </div>
+        </div>
+      </section>
+
+      <section class="abschnitt" aria-labelledby="bald-titel">
+        <div class="abschnitt-kopf">
+          <p class="etikett">Ehrlich gesagt</p>
+          <h2 id="bald-titel">Was noch nicht geht</h2>
+          <p>Damit du nicht enttäuscht bist:</p>
+        </div>
+        <ul class="ehrlich">
+          <li>
+            <h3>Anmelden mit Microsoft-Konto <span class="marke-bald">kommt bald</span></h3>
+            <p>Im Download funktioniert die Anmeldung noch nicht. Bis dahin startest du ohne Konto – das reicht für Einzelspieler und LAN, nicht für Online-Server.</p>
+            <p><strong>Wichtig:</strong> FUSE ersetzt keinen Minecraft-Kauf. Spiel bitte nur, wenn dir Minecraft gehört.</p>
+          </li>
+          <li>
+            <h3>Modpacks mit Forge &amp; Co. <span class="marke-nein">noch nicht</span></h3>
+            <p>Modpacks gehen bisher nur mit Fabric. Einzelne Mods für Forge, NeoForge und Quilt gehen schon.</p>
+          </li>
+          <li>
+            <h3>Bedrock modden <span class="marke-nein">nicht geplant</span></h3>
+            <p>FUSE startet Bedrock nur. Installieren und Mods gibt es nur für die Java Edition.</p>
+          </li>
+        </ul>
+      </section>
+
+      <section id="so-gehts" class="abschnitt" aria-labelledby="so-gehts-titel">
+        <div class="abschnitt-kopf">
+          <p class="etikett">Anleitung</p>
+          <h2 id="so-gehts-titel">So legst du los</h2>
+          <p>Vier Schritte, dann bist du im Spiel.</p>
+        </div>
+
+        <ol class="schritte">
+          <li>
+            <h3>Herunterladen</h3>
+            <p>Auf der <a href="https://github.com/TNTExplodiert/fuse/releases/latest">Download-Seite</a> unter „Assets“ die Datei <code>FUSE-bau….zip</code> laden – nicht die <code>version.json</code> und nicht „Source code“.</p>
+          </li>
+          <li>
+            <h3>Entpacken</h3>
+            <p>Rechtsklick auf die Zip <span class="pfeil" aria-hidden="true">→</span><span class="nur-vorlesen"> dann</span> <span class="knopftext">Alle extrahieren …</span>. Wichtig: erst entpacken, nicht direkt in der Zip starten.</p>
+          </li>
+          <li>
+            <h3>Starten</h3>
+            <p>Im entpackten Ordner <code>FUSELauncher.exe</code> doppelklicken. Solange die Microsoft-Anmeldung fehlt: beim ersten Mal einen Namen eintippen und <span class="knopftext">Ohne Konto spielen</span> drücken.</p>
+          </li>
+          <li>
+            <h3>Spielen</h3>
+            <p>Version und Loader wählen, <strong>SPIELEN</strong> drücken. Beim ersten Start einer Version lädt FUSE Minecraft und Java – das kann ein paar Minuten dauern.</p>
+          </li>
+        </ol>
+
+        <aside class="kasten kasten-warn" aria-labelledby="smartscreen-titel">
+          <span class="symbol"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3 4 6v6c0 5 3.5 8 8 9 4.5-1 8-4 8-9V6z"/><path d="M12 8v5M12 16h.01"/></svg></span>
+          <div>
+            <h3 id="smartscreen-titel">Windows zeigt eine blaue Warnung?</h3>
+            <p>
+              Keine Panik. FUSE ist nicht digital signiert (so ein Zertifikat kostet Geld),
+              deshalb kann Windows beim ersten Start
+              „Der Computer wurde durch Windows geschützt“ anzeigen.
+              Klick auf <span class="knopftext">Weitere Informationen</span>
+              und dann auf <span class="knopftext">Trotzdem ausführen</span>.
+            </p>
+            <p>Lade FUSE deshalb nur über diese Seite oder direkt von der GitHub-Seite <code>TNTExplodiert/fuse</code> herunter.</p>
+          </div>
+        </aside>
+
+        <aside class="kasten kasten-tipp" aria-labelledby="updates-titel">
+          <span class="symbol"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 12a8 8 0 0 1-14.3 4.9M4 12a8 8 0 0 1 14.3-4.9"/><path d="M18.5 3v4.2h-4.2M5.5 21v-4.2h4.2"/></svg></span>
+          <div>
+            <h3 id="updates-titel">Tipp: Updates einschalten</h3>
+            <p>
+              In FUSE <span class="knopftext">Einstellungen</span>
+              <span class="pfeil" aria-hidden="true">→</span><span class="nur-vorlesen"> dann</span>
+              <span class="knopftext">Updates</span>, bei „Quelle“
+              <code>TNTExplodiert/fuse</code> eintragen und auf
+              <span class="knopftext">Nachsehen</span> drücken.
+              Ab dann hält sich FUSE selbst aktuell.
+            </p>
+          </div>
+        </aside>
+
+        <div class="unten-knopf">
+          <a class="knopf knopf-haupt" href="https://github.com/TNTExplodiert/fuse/releases/latest">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12M7 10l5 5 5-5M5 21h14"/></svg>
+            FUSE herunterladen
+          </a>
+        </div>
+      </section>
+
+    </div>
+  </main>
+
+  <footer class="fuss">
+    <div class="huelle fuss-raster">
+      <div>
+        <a class="marke" href="#inhalt">
+          <img src="icon.svg" width="24" height="24" alt="">
+          <span>FUSE</span>
+        </a>
+        <p class="fuss-wer">Ein Hobbyprojekt von TNTExplodiert.</p>
+      </div>
+      <ul class="fuss-links">
+        <li><a href="https://github.com/TNTExplodiert/fuse">GitHub-Seite</a></li>
+        <li><a href="https://github.com/TNTExplodiert/fuse/releases">Alle Versionen</a></li>
+        <li><a href="https://github.com/TNTExplodiert/fuse/issues">Fehler melden</a></li>
+      </ul>
+      <div class="fuss-hinweis">
+        <p><strong>Nicht offiziell. Nicht von Mojang oder Microsoft.</strong></p>
+        <p>FUSE ist kein offizielles Minecraft-Produkt und hat nichts mit Mojang oder Microsoft zu tun. „Minecraft“ ist eine Marke von Mojang bzw. Microsoft.</p>
+        <p>Auf den Bildern sind die Editions-Symbole aus FUSE durch schlichte Platzhalter („J“ und „B“) ersetzt.</p>
+        <p>Diese Seite setzt keine Cookies, hat kein Tracking und lädt nichts von fremden Servern.</p>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>

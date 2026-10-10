@@ -1,0 +1,914 @@
+/* FUSE – Webseite.
+   Farben und Schrift kommen aus dem Launcher selbst (ui/index.html, :root).
+   Bewusst einheitlich dunkel: das ist die Launcher-Welt. Alle Farben sind
+   ausdrücklich gesetzt, nichts hängt am hellen/dunklen Modus des Browsers.
+   Keine fremden Server: nur Systemschriften, alle Bilder liegen im Ordner. */
+
+:root {
+  --bg: #0d0f13;
+  --bg-2: #14171d;
+  --bg-3: #1b1f27;
+  --rand: #262b35;
+  --rand-hell: #39414f;
+  --text: #e9edf4;
+  --text-2: #8a94a6;
+  --text-3: #aeb6c5;
+  --akzent: #e23b3b;
+  --akzent-2: #ff6b5a;
+  /* Ende des Knopf-Verlaufs etwas dunkler als --akzent-2, damit weiße
+     Schrift auf dem ganzen Knopf mindestens 3:1 hat (große, fette Schrift). */
+  --akzent-knopf: #ef5a48;
+  --warn: #f5a524;
+  --gut: #3ddc84;
+  --schrift: system-ui, "Segoe UI", Arial, sans-serif;
+  --mono: ui-monospace, "Cascadia Mono", Consolas, monospace;
+  --breite: 1120px;
+  --rundung: 14px;
+  --t-kurz: 120ms;
+  --t-mittel: 180ms;
+  --kurve: cubic-bezier(.2, .8, .2, 1);
+  color-scheme: dark;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  background: var(--bg);
+  color: var(--text);
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--schrift);
+  font-size: 16px;
+  line-height: 1.6;
+  overflow-x: hidden;
+}
+
+/* Das feine Raster aus dem Launcher-Hintergrund. */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  opacity: .22;
+  background-image:
+    linear-gradient(rgba(255, 255, 255, .05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, .05) 1px, transparent 1px);
+  background-size: 32px 32px;
+  -webkit-mask-image: radial-gradient(circle at 50% 20%, #000 0, transparent 70%);
+  mask-image: radial-gradient(circle at 50% 20%, #000 0, transparent 70%);
+}
+
+img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+a {
+  color: var(--akzent-2);
+  text-underline-offset: 3px;
+}
+
+a:hover {
+  color: #ff8a7c;
+}
+
+h1,
+h2,
+h3,
+p,
+ul,
+ol,
+figure {
+  margin: 0;
+}
+
+strong {
+  color: var(--text);
+  font-weight: 700;
+}
+
+code {
+  font-family: var(--mono);
+  font-size: .92em;
+  padding: .1em .4em;
+  border-radius: 6px;
+  background: var(--bg-3);
+  border: 1px solid var(--rand);
+  color: var(--text);
+  white-space: nowrap;
+}
+
+/* Tastatur-Fokus: derselbe Ring wie im Launcher. */
+:focus {
+  outline: none;
+}
+
+:focus-visible {
+  outline: 2px solid var(--akzent-2);
+  outline-offset: 3px;
+  border-radius: 6px;
+}
+
+.huelle {
+  width: 100%;
+  max-width: var(--breite);
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+/* ---------- Sprunglink ---------- */
+
+.sprung {
+  position: absolute;
+  left: 12px;
+  top: -100px;
+  z-index: 100;
+  padding: 10px 16px;
+  border-radius: 10px;
+  background: var(--bg-3);
+  color: var(--text);
+  border: 1px solid var(--rand-hell);
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.sprung:focus-visible {
+  top: 12px;
+}
+
+/* ---------- Kopfleiste ---------- */
+
+.leiste {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background: rgba(13, 15, 19, .82);
+  border-bottom: 1px solid var(--rand);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+}
+
+.leiste-innen {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  min-height: 60px;
+}
+
+.marke {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--text);
+  text-decoration: none;
+  font-weight: 900;
+  letter-spacing: 1.6px;
+  font-size: 17px;
+}
+
+.marke:hover {
+  color: var(--text);
+}
+
+.leiste nav {
+  margin-left: auto;
+}
+
+.leiste ul {
+  display: flex;
+  gap: 4px;
+  list-style: none;
+  padding: 0;
+}
+
+.leiste nav a {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 40px;
+  padding: 0 12px;
+  border-radius: 10px;
+  color: var(--text-3);
+  text-decoration: none;
+  font-size: 15px;
+  font-weight: 600;
+  transition: background-color var(--t-kurz) ease, color var(--t-kurz) ease;
+}
+
+.leiste nav a:hover {
+  background: var(--bg-3);
+  color: var(--text);
+}
+
+.leiste nav svg {
+  width: 14px;
+  height: 14px;
+}
+
+/* ---------- Kopf (Held) ---------- */
+
+.held {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding-top: 72px;
+  padding-bottom: 48px;
+}
+
+/* Roter Schein hinter dem Logo – wie unter dem SPIELEN-Knopf. */
+.held::before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  top: -40px;
+  left: 50%;
+  width: min(900px, 100%);
+  height: 520px;
+  transform: translateX(-50%);
+  background: radial-gradient(closest-side, rgba(226, 59, 59, .20), transparent);
+  pointer-events: none;
+}
+
+.held-logo {
+  width: 88px;
+  height: 88px;
+  border-radius: 20px;
+  box-shadow: 0 18px 56px rgba(226, 59, 59, .35);
+}
+
+.etikett {
+  display: inline-block;
+  margin-top: 26px;
+  padding: 4px 12px;
+  border-radius: 999px;
+  background: rgba(226, 59, 59, .14);
+  border: 1px solid rgba(255, 107, 90, .28);
+  color: #ffb3a8;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: .4px;
+}
+
+.held h1 {
+  margin-top: 10px;
+  font-size: clamp(64px, 15vw, 128px);
+  font-weight: 900;
+  line-height: 1;
+  letter-spacing: .04em;
+  color: var(--text);
+}
+
+.einleitung {
+  max-width: 32em;
+  text-wrap: balance;
+  margin-top: 18px;
+  font-size: clamp(17px, 2.2vw, 20px);
+  line-height: 1.55;
+  color: var(--text-3);
+}
+
+.knoepfe {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 12px;
+  margin-top: 30px;
+}
+
+.knopf {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  min-height: 52px;
+  padding: 0 24px;
+  border-radius: 12px;
+  font-weight: 800;
+  font-size: 17px;
+  text-decoration: none;
+  transition: transform var(--t-mittel) var(--kurve), box-shadow var(--t-mittel) ease,
+              background-color var(--t-kurz) ease, border-color var(--t-kurz) ease;
+}
+
+.knopf svg {
+  width: 20px;
+  height: 20px;
+  flex: none;
+}
+
+.knopf-haupt {
+  min-height: 60px;
+  padding: 0 34px;
+  font-size: 20px;
+  letter-spacing: .3px;
+  color: #fff;
+  background: linear-gradient(135deg, var(--akzent), var(--akzent-knopf));
+  box-shadow: 0 18px 56px rgba(226, 59, 59, .28);
+  text-shadow: 0 1px 2px rgba(80, 10, 10, .35);
+}
+
+.knopf-haupt:hover {
+  color: #fff;
+  transform: translateY(-1px);
+  box-shadow: 0 18px 76px rgba(226, 59, 59, .42);
+}
+
+.knopf-haupt:active {
+  transform: scale(.985);
+}
+
+.knopf-zweit {
+  color: var(--text);
+  background: var(--bg-3);
+  border: 1px solid var(--rand);
+}
+
+.knopf-zweit:hover {
+  color: var(--text);
+  border-color: var(--rand-hell);
+  background: #222733;
+}
+
+.hinweis-klein {
+  margin-top: 16px;
+  color: var(--text-2);
+  font-size: 15px;
+}
+
+.nicht-offiziell {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 22px;
+  padding: 8px 14px;
+  border-radius: 10px;
+  background: var(--bg-2);
+  border: 1px solid var(--rand);
+  color: var(--text);
+  font-size: 15px;
+  text-align: left;
+}
+
+.nicht-offiziell svg {
+  width: 18px;
+  height: 18px;
+  flex: none;
+  color: var(--akzent-2);
+}
+
+/* ---------- Großes Bild ---------- */
+
+.buehne {
+  position: relative;
+  margin: 8px auto 0;
+  max-width: 1080px;
+}
+
+.buehne::before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  inset: 40% 6% -6% 6%;
+  background: radial-gradient(closest-side, rgba(226, 59, 59, .30), transparent);
+  filter: blur(20px);
+  pointer-events: none;
+}
+
+.fenster {
+  border-radius: var(--rundung);
+  border: 1px solid var(--rand);
+  background: var(--bg-2);
+  box-shadow: 0 30px 80px rgba(0, 0, 0, .55);
+  overflow: hidden;
+}
+
+.fenster img {
+  width: 100%;
+}
+
+figcaption {
+  margin-top: 12px;
+  color: var(--text-2);
+  font-size: 14px;
+  text-align: center;
+}
+
+/* ---------- Abschnitte ---------- */
+
+.abschnitt {
+  padding-top: 96px;
+}
+
+.abschnitt-kopf {
+  max-width: 40em;
+  margin: 0 auto 36px;
+  text-align: center;
+}
+
+.abschnitt-kopf .etikett {
+  margin-top: 0;
+}
+
+h2 {
+  margin-top: 12px;
+  font-size: clamp(30px, 5vw, 44px);
+  font-weight: 900;
+  line-height: 1.15;
+  letter-spacing: -.01em;
+  text-wrap: balance;
+  color: var(--text);
+}
+
+.abschnitt-kopf p:not(.etikett) {
+  margin-top: 12px;
+  color: var(--text-3);
+  font-size: 18px;
+}
+
+/* ---------- Funktionskarten ---------- */
+
+.karten {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 300px), 1fr));
+  gap: 16px;
+  list-style: none;
+  padding: 0;
+}
+
+.karte {
+  padding: 22px 22px 24px;
+  border-radius: var(--rundung);
+  background: var(--bg-2);
+  border: 1px solid var(--rand);
+  transition: transform var(--t-mittel) var(--kurve), border-color var(--t-kurz) ease;
+}
+
+.karte:hover {
+  transform: translateY(-2px);
+  border-color: var(--rand-hell);
+}
+
+.symbol {
+  display: grid;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  border-radius: 11px;
+  background: rgba(226, 59, 59, .14);
+  color: var(--akzent-2);
+}
+
+.symbol svg {
+  width: 22px;
+  height: 22px;
+}
+
+.karte h3 {
+  margin-top: 16px;
+  font-size: 18px;
+  font-weight: 800;
+  line-height: 1.3;
+  color: var(--text);
+}
+
+.karte p {
+  margin-top: 8px;
+  color: var(--text-3);
+  font-size: 15.5px;
+}
+
+.karte .klein {
+  margin-top: 10px;
+  color: var(--text-2);
+  font-size: 14px;
+}
+
+.ausserdem {
+  margin-top: 16px;
+  padding: 22px 24px;
+  border-radius: var(--rundung);
+  background: var(--bg-2);
+  border: 1px solid var(--rand);
+}
+
+.ausserdem h3 {
+  font-size: 17px;
+  font-weight: 800;
+}
+
+.ausserdem ul {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 420px), 1fr));
+  gap: 6px 24px;
+  margin-top: 10px;
+  padding: 0;
+  list-style: none;
+  color: var(--text-3);
+  font-size: 15.5px;
+}
+
+.ausserdem li {
+  position: relative;
+  padding-left: 20px;
+}
+
+.ausserdem li::before {
+  content: "";
+  position: absolute;
+  left: 2px;
+  top: .62em;
+  width: 7px;
+  height: 7px;
+  border-radius: 2px;
+  background: linear-gradient(135deg, var(--akzent), var(--akzent-2));
+}
+
+/* ---------- Einblicke (Bilder mit Text) ---------- */
+
+.einblick {
+  display: grid;
+  gap: 28px;
+  align-items: center;
+  margin-top: 28px;
+  padding: 28px;
+  border-radius: 20px;
+  background: linear-gradient(180deg, rgba(20, 23, 29, .9), rgba(13, 15, 19, .6));
+  border: 1px solid var(--rand);
+}
+
+.einblick + .einblick {
+  margin-top: 20px;
+}
+
+.einblick-text h3 {
+  font-size: clamp(22px, 3vw, 28px);
+  font-weight: 900;
+  line-height: 1.2;
+}
+
+.einblick-text {
+  max-width: 46em;
+}
+
+.einblick-text p {
+  margin-top: 10px;
+  color: var(--text-3);
+}
+
+.einblick-bilder {
+  display: grid;
+  gap: 16px;
+}
+
+.einblick-bilder figure {
+  min-width: 0;
+}
+
+.einblick-bilder figcaption {
+  text-align: left;
+}
+
+.fenster-klein {
+  max-width: 520px;
+}
+
+/* ---------- Noch nicht drin ---------- */
+
+.ehrlich {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 320px), 1fr));
+  gap: 16px;
+  list-style: none;
+  padding: 0;
+}
+
+.ehrlich li {
+  padding: 20px 22px;
+  border-radius: var(--rundung);
+  background: var(--bg-2);
+  border: 1px dashed var(--rand-hell);
+  color: var(--text-3);
+}
+
+.ehrlich h3 {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 10px;
+  font-size: 17px;
+  font-weight: 800;
+  color: var(--text);
+}
+
+.ehrlich p {
+  margin-top: 8px;
+}
+
+.marke-bald,
+.marke-nein {
+  display: inline-block;
+  padding: 2px 10px;
+  border-radius: 999px;
+  font-size: 12.5px;
+  font-weight: 800;
+  letter-spacing: .3px;
+}
+
+.marke-bald {
+  background: rgba(245, 165, 36, .14);
+  border: 1px solid rgba(245, 165, 36, .38);
+  color: var(--warn);
+}
+
+.marke-nein {
+  background: var(--bg-3);
+  border: 1px solid var(--rand-hell);
+  color: var(--text-3);
+}
+
+/* ---------- So geht's ---------- */
+
+.schritte {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 240px), 1fr));
+  gap: 16px;
+  list-style: none;
+  padding: 0;
+  counter-reset: schritt;
+}
+
+.schritte li {
+  position: relative;
+  padding: 22px 22px 24px;
+  border-radius: var(--rundung);
+  background: var(--bg-2);
+  border: 1px solid var(--rand);
+  counter-increment: schritt;
+  color: var(--text-3);
+}
+
+.schritte li::before {
+  content: counter(schritt);
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, var(--akzent), var(--akzent-knopf));
+  color: #fff;
+  font-size: 20px;
+  font-weight: 900;
+  box-shadow: 0 10px 30px rgba(226, 59, 59, .25);
+}
+
+.schritte h3 {
+  margin-top: 16px;
+  font-size: 18px;
+  font-weight: 800;
+  color: var(--text);
+}
+
+.schritte p {
+  margin-top: 8px;
+  font-size: 15.5px;
+}
+
+.knopftext {
+  display: inline-block;
+  padding: 0 7px;
+  border-radius: 6px;
+  background: var(--bg-3);
+  border: 1px solid var(--rand-hell);
+  color: var(--text);
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.kasten {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 16px;
+  margin-top: 16px;
+  padding: 22px 24px;
+  border-radius: var(--rundung);
+  background: var(--bg-2);
+  border: 1px solid var(--rand);
+  color: var(--text-3);
+}
+
+.kasten-warn {
+  border-left: 4px solid var(--warn);
+}
+
+.kasten .symbol {
+  background: rgba(245, 165, 36, .14);
+  color: var(--warn);
+}
+
+.kasten-tipp .symbol {
+  background: rgba(61, 220, 132, .12);
+  color: var(--gut);
+}
+
+.kasten h3 {
+  font-size: 17px;
+  font-weight: 800;
+  color: var(--text);
+}
+
+.kasten p {
+  margin-top: 6px;
+}
+
+.pfeil {
+  color: var(--text-2);
+}
+
+/* Nur für Vorleseprogramme (statt des Pfeils, der nur zum Ansehen ist). */
+.nur-vorlesen {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.unten-knopf {
+  display: flex;
+  justify-content: center;
+  margin-top: 40px;
+}
+
+/* ---------- Fußzeile ---------- */
+
+.fuss {
+  margin-top: 110px;
+  padding: 40px 0 48px;
+  border-top: 1px solid var(--rand);
+  background: rgba(20, 23, 29, .6);
+  color: var(--text-2);
+  font-size: 15px;
+}
+
+.fuss-raster {
+  display: grid;
+  gap: 24px;
+}
+
+.fuss .marke {
+  font-size: 16px;
+}
+
+.fuss-wer {
+  margin-top: 8px;
+}
+
+.fuss-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 20px;
+  list-style: none;
+  padding: 0;
+}
+
+.fuss-links a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 40px;
+  color: var(--text-3);
+  font-weight: 600;
+}
+
+.fuss-links a:hover {
+  color: var(--text);
+}
+
+.fuss-hinweis {
+  padding-top: 20px;
+  border-top: 1px solid var(--rand);
+}
+
+.fuss-hinweis strong {
+  display: block;
+  font-size: 16px;
+}
+
+.fuss-hinweis p + p {
+  margin-top: 6px;
+}
+
+/* ---------- Breiten ---------- */
+
+@media (min-width: 720px) {
+  .huelle {
+    padding: 0 32px;
+  }
+
+  .held {
+    padding-top: 96px;
+  }
+
+  .einblick {
+    padding: 36px;
+  }
+
+  .einblick-bilder.zwei {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .fuss-raster {
+    grid-template-columns: 1fr auto;
+    align-items: start;
+  }
+
+  .fuss-hinweis {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (min-width: 980px) {
+  .einblick-schmal {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .abschnitt {
+    padding-top: 120px;
+  }
+}
+
+@media (max-width: 520px) {
+  .leiste-innen {
+    gap: 8px;
+  }
+
+  .leiste nav a {
+    padding: 0 9px;
+    font-size: 14px;
+  }
+
+  .leiste .nur-breit {
+    display: none;
+  }
+
+  .knoepfe {
+    width: 100%;
+  }
+
+  .knoepfe .knopf {
+    width: 100%;
+  }
+
+  .kasten {
+    grid-template-columns: 1fr;
+    padding: 20px;
+  }
+
+  .einblick {
+    padding: 18px;
+  }
+}
+
+/* ---------- Weniger Bewegung ---------- */
+
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    transition: none !important;
+    animation: none !important;
+  }
+
+  .karte:hover,
+  .knopf-haupt:hover,
+  .knopf-haupt:active {
+    transform: none;
+  }
+}
+
+/* Sprungziele nicht unter der festen Leiste verstecken. */
+[id] {
+  scroll-margin-top: 76px;
+}
