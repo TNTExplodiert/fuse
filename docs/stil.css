@@ -912,3 +912,1700 @@ h2 {
 [id] {
   scroll-margin-top: 76px;
 }
+
+/* ======================================================================
+   Live-Vorschau („Probier’s aus“)
+   Ein schlanker, eigener Nachbau des FUSE-Fensters: gleiche Farben und
+   Abstände wie im Launcher, aber eigenes Markup/CSS und demo.js.
+   Alle Farben ausdrücklich gesetzt. Unter 760 px gibt es statt der
+   Vorschau das echte Bild (.demo-handy).
+   ====================================================================== */
+
+.abschnitt.abschnitt-demo {
+  padding-top: 40px;
+}
+
+.abschnitt-demo .abschnitt-kopf {
+  margin-bottom: 28px;
+}
+
+.demo {
+  position: relative;
+  max-width: 1080px;
+  margin: 0 auto;
+  font-size: 14px;
+  line-height: 1.45;
+}
+
+/* Roter Schein unter dem Fenster – wie beim großen Bild. */
+.demo::before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  inset: 45% 6% -4% 6%;
+  background: radial-gradient(closest-side, rgba(226, 59, 59, .26), transparent);
+  filter: blur(20px);
+  pointer-events: none;
+}
+
+/* hidden muss gewinnen, auch gegen display aus diesem Block. */
+.demo [hidden] {
+  display: none !important;
+}
+
+/* :where() hält die Spezifität bei 0, damit die Klassen unten gewinnen. */
+:where(.demo) button,
+:where(.demo) input,
+:where(.demo) select {
+  font: inherit;
+  color: inherit;
+}
+
+:where(.demo) button {
+  cursor: pointer;
+}
+
+:where(.demo) button:disabled {
+  cursor: default;
+  opacity: .5;
+}
+
+:where(.demo) h3,
+:where(.demo) h4,
+:where(.demo) p {
+  margin: 0;
+}
+
+.demo-fenster {
+  display: flex;
+  flex-direction: column;
+  height: 640px;
+  border-radius: var(--rundung);
+  border: 1px solid var(--rand);
+  background: var(--bg);
+  box-shadow: 0 30px 80px rgba(0, 0, 0, .55);
+  overflow: hidden;
+}
+
+/* ---------- Titelleiste ---------- */
+
+.demo-titelleiste {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex: none;
+  height: 38px;
+  padding-left: 14px;
+  background: var(--bg-2);
+  border-bottom: 1px solid var(--rand);
+}
+
+.demo-titelleiste img {
+  width: 20px;
+  height: 20px;
+  border-radius: 5px;
+}
+
+.demo-titelname {
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 1.2px;
+  color: var(--text-2);
+}
+
+.demo-fensterknoepfe {
+  display: flex;
+  margin-left: auto;
+  height: 100%;
+}
+
+.demo-fensterknoepfe svg {
+  width: 46px;
+  height: 100%;
+  padding: 13px 17px;
+  fill: none;
+  stroke: var(--text-2);
+  stroke-width: 1.2;
+}
+
+/* ---------- Körper: Leiste + Inhalt ---------- */
+
+.demo-koerper {
+  display: grid;
+  grid-template-columns: 88px minmax(0, 1fr);
+  flex: 1;
+  min-height: 0;
+}
+
+.demo-leiste {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  padding: 16px 12px;
+  background: rgba(13, 15, 19, .72);
+  border-right: 1px solid rgba(38, 43, 53, .6);
+}
+
+.demo-mini {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  background: var(--bg-2);
+  color: var(--akzent);
+}
+
+.demo-mini svg {
+  width: 22px;
+  height: 22px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linejoin: round;
+}
+
+.demo-reiter {
+  display: grid;
+  gap: 6px;
+}
+
+.demo-tab {
+  position: relative;
+  display: grid;
+  justify-items: center;
+  align-content: center;
+  gap: 4px;
+  width: 64px;
+  min-height: 56px;
+  padding: 6px 2px;
+  border: 0;
+  border-radius: 10px;
+  background: transparent;
+  color: var(--text-2);
+  transition: background-color var(--t-kurz) ease, color var(--t-kurz) ease;
+}
+
+.demo-tab svg {
+  width: 22px;
+  height: 22px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.9;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.demo-tab-name {
+  font-size: 11px;
+  font-weight: 650;
+  line-height: 1.1;
+  letter-spacing: .1px;
+}
+
+.demo-tab:hover {
+  background: var(--bg-3);
+  color: var(--text);
+}
+
+.demo-tab[aria-selected="true"] {
+  background: var(--bg-2);
+  color: var(--akzent-2);
+}
+
+/* Der rote Strich links neben dem aktiven Bereich – wie in FUSE. */
+.demo-tab[aria-selected="true"]::before {
+  content: "";
+  position: absolute;
+  left: -12px;
+  top: 50%;
+  width: 4px;
+  height: 24px;
+  margin-top: -12px;
+  border-radius: 999px;
+  background: var(--akzent);
+}
+
+.demo-tab:focus-visible {
+  outline-offset: 1px;
+}
+
+/* Editions-Kacheln „J“ und „B“ (Platzhalter statt Mojang-Grafik). */
+.demo-ed {
+  display: inline-grid;
+  place-items: center;
+  flex: none;
+  width: 24px;
+  height: 24px;
+  border-radius: 6px;
+  color: #fff;
+  font-size: 14px;
+  font-weight: 900;
+  line-height: 1;
+}
+
+.demo-ed-j {
+  background: linear-gradient(135deg, #5b8de6, #3c66bd);
+}
+
+.demo-ed-b {
+  background: linear-gradient(135deg, #8a93a3, #5d6574);
+}
+
+.demo-ed-gross {
+  width: 48px;
+  height: 48px;
+  border-radius: 10px;
+  font-size: 26px;
+}
+
+.demo[data-edition="java"] .demo-tab .demo-ed-b,
+.demo[data-edition="bedrock"] .demo-tab .demo-ed-j,
+.demo[data-edition="java"] .demo-nur-bedrock,
+.demo[data-edition="bedrock"] .demo-nur-java {
+  display: none;
+}
+
+/* ---------- Editions-Menü an „Spielen“ ----------
+   Wie in FUSE: der erste Klick auf Spielen öffnet den Bereich, ein
+   zweiter Klick (oder der kleine Pfeil daneben) lässt rechts neben der
+   Leiste das Menü herausgleiten. Eigener Nachbau, nur Optik/Verhalten. */
+
+.demo-reiter-huelle {
+  position: relative;
+}
+
+/* Der Pfeil › rechts neben Spielen, im Rand der Leiste. Nur sichtbar und
+   klickbar, wenn Spielen offen ist – erst dann öffnet ein Klick das Menü.
+   Er sitzt im Knopf, sein Klick ist also ein Klick auf Spielen. */
+.demo-tab .demo-ed-pfeil {
+  position: absolute;
+  left: calc(100% + 1px);
+  top: 50%;
+  width: 8px;
+  height: 12px;
+  margin-top: -6px;
+  stroke-width: 2.4;
+  color: var(--text-2);
+  opacity: 0;
+  transform: translateX(-4px);
+  pointer-events: none;
+  transition: opacity var(--t-mittel) ease,
+              transform 220ms cubic-bezier(.34, 1.4, .64, 1),
+              color var(--t-kurz) ease;
+}
+
+.demo-an .demo-tab[aria-selected="true"] .demo-ed-pfeil {
+  opacity: .8;
+  transform: none;
+  pointer-events: auto;
+}
+
+.demo-an .demo-tab[aria-selected="true"]:hover .demo-ed-pfeil,
+.demo-an .demo-tab[aria-selected="true"]:focus-visible .demo-ed-pfeil {
+  opacity: 1;
+  color: var(--text);
+  transform: translateX(2px);
+}
+
+/* Menü offen: der Pfeil zeigt zurück – auch unter der Maus (gleiche
+   Spezifität wie die Regel darüber, steht danach). */
+.demo-an .demo-tab[aria-selected="true"][aria-expanded="true"] .demo-ed-pfeil {
+  opacity: 1;
+  color: var(--text);
+  transform: rotate(180deg);
+}
+
+/* Liegt über dem Inhalt rechts (auch über der Meldung, z-index 5).
+   left: 12 px Leistenrand + 1 px Linie + 11 px Luft. */
+.demo-edmenue {
+  position: absolute;
+  z-index: 6;
+  top: -8px;
+  left: calc(100% + 24px);
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  width: max-content;
+  min-width: 232px;
+  padding: 5px;
+  border: 1px solid var(--rand);
+  border-radius: 12px;
+  background: var(--bg-2);
+  box-shadow: 0 18px 30px -12px rgba(0, 0, 0, .65), 0 2px 8px rgba(0, 0, 0, .3);
+  /* Herausgleiten: der Ausschnitt gibt das Menü von links her frei
+     (links genau ab der Kante der Leiste), dazu schiebt es nach rechts.
+     Offen ist der Ausschnitt größer als das Menü – sonst fehlt der
+     Schatten. Auf 240 ms, zu 150 ms. */
+  clip-path: inset(-30px -60px -60px -11px);
+  transition: opacity 180ms ease,
+              transform 240ms var(--kurve),
+              clip-path 240ms var(--kurve),
+              display 240ms allow-discrete;
+}
+
+/* Zu: .demo [hidden] setzt display: none – mit allow-discrete erst am
+   Ende der Blende. Bei „weniger Bewegung“ gibt es keine Übergänge
+   (Regel oben), dann ist das Menü sofort da bzw. sofort weg. */
+.demo-edmenue[hidden] {
+  opacity: 0;
+  transform: translateX(-14px);
+  clip-path: inset(-30px 100% -60px -11px);
+  pointer-events: none;
+  transition-duration: 150ms;
+}
+
+@starting-style {
+  .demo-edmenue:not([hidden]) {
+    opacity: 0;
+    transform: translateX(-14px);
+    clip-path: inset(-30px 100% -60px -11px);
+  }
+}
+
+.demo-edwahl {
+  display: grid;
+  grid-template-columns: 32px minmax(0, 1fr) 18px;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  min-height: 46px;
+  padding: 6px 10px 6px 7px;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--text);
+  text-align: left;
+  transition: background-color var(--t-kurz) ease, box-shadow var(--t-kurz) ease;
+}
+
+.demo-edwahl:hover {
+  background: var(--bg-3);
+}
+
+/* Die gewählte Edition: roter Rahmen und ein Haken – wie in FUSE. */
+.demo-edwahl[aria-checked="true"] {
+  background: rgba(226, 59, 59, .12);
+  box-shadow: inset 0 0 0 1px rgba(226, 59, 59, .66);
+}
+
+.demo-edwahl[aria-checked="true"]:hover {
+  background: rgba(226, 59, 59, .18);
+}
+
+.demo-edwahl:focus-visible {
+  outline-offset: 1px;
+}
+
+.demo-edwahl .demo-ed {
+  width: 32px;
+  height: 32px;
+  border-radius: 7px;
+  font-size: 17px;
+}
+
+.demo-edwahl-text {
+  display: grid;
+  gap: 2px;
+  min-width: 0;
+}
+
+.demo-edwahl-name {
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 16px;
+  white-space: nowrap;
+}
+
+.demo-edwahl-info {
+  color: var(--text-2);
+  font-size: 12px;
+  line-height: 14px;
+  white-space: nowrap;
+}
+
+.demo-edwahl-haken {
+  width: 18px;
+  height: 18px;
+  fill: none;
+  stroke: var(--akzent-2);
+  stroke-width: 2.6;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  opacity: 0;
+  transform: scale(.6);
+  transition: opacity 140ms ease, transform 200ms cubic-bezier(.34, 1.4, .64, 1);
+}
+
+.demo-edwahl[aria-checked="true"] .demo-edwahl-haken {
+  opacity: 1;
+  transform: none;
+}
+
+/* Wechselt die Edition, springt die Kachel an Spielen kurz auf. */
+@media (prefers-reduced-motion: no-preference) {
+  .demo.demo-an .demo-tab .demo-ed {
+    animation: demo-ed-rein 280ms cubic-bezier(.34, 1.4, .64, 1);
+  }
+
+  @keyframes demo-ed-rein {
+    from {
+      opacity: 0;
+      transform: scale(.5) rotate(-14deg);
+    }
+  }
+}
+
+/* ---------- Inhalt ---------- */
+
+.demo-haupt {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  min-width: 0;
+  min-height: 0;
+  padding: 14px 22px 16px;
+  background: radial-gradient(circle at 50% 0, rgba(255, 255, 255, .025), transparent 60%);
+}
+
+.demo-kopf {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 8px 12px;
+  flex: none;
+}
+
+.demo-beispiel {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 4px 11px;
+  border-radius: 999px;
+  background: rgba(245, 165, 36, .12);
+  border: 1px solid rgba(245, 165, 36, .38);
+  color: var(--warn);
+  font-size: 12.5px;
+  font-weight: 700;
+}
+
+.demo-beispiel svg {
+  width: 15px;
+  height: 15px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2.2;
+  stroke-linecap: round;
+}
+
+.demo-spieler {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  height: 42px;
+  padding: 4px 12px 4px 4px;
+  border-radius: 999px;
+  background: var(--bg-2);
+  color: var(--text);
+  font-weight: 700;
+}
+
+/* Neutrale Kachel statt Spielerkopf. */
+.demo-kopfbild {
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #4a5262, #343a46);
+  color: var(--text);
+  font-size: 15px;
+  font-weight: 800;
+}
+
+.demo-spieler svg {
+  width: 16px;
+  height: 16px;
+  fill: none;
+  stroke: var(--text-2);
+  stroke-width: 2.2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.demo-bereiche {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+}
+
+.demo-bereich {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  height: calc(100% + 6px);
+  padding: 3px;
+  margin: -3px;
+  overflow: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--rand-hell) transparent;
+}
+
+.demo-bereich:focus-visible {
+  outline-offset: -2px;
+}
+
+.demo-titel {
+  font-size: 18px;
+  font-weight: 800;
+  line-height: 1.25;
+  color: var(--text);
+}
+
+.demo-hilfe {
+  color: var(--text-2);
+  font-size: 13px;
+}
+
+.demo-karte {
+  padding: 22px 24px;
+  border-radius: 12px;
+  background: var(--bg-2);
+  box-shadow: 0 20px 64px rgba(0, 0, 0, .26);
+}
+
+/* ---------- Bedienelemente ---------- */
+
+.demo-klein {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  flex: none;
+  min-height: 36px;
+  padding: 0 14px;
+  border-radius: 8px;
+  border: 1px solid var(--rand);
+  background: var(--bg-3);
+  color: var(--text);
+  font-size: 13.5px;
+  font-weight: 600;
+  white-space: nowrap;
+  transition: background-color var(--t-kurz) ease, border-color var(--t-kurz) ease;
+}
+
+.demo-klein:hover:not(:disabled) {
+  background: #232834;
+  border-color: var(--rand-hell);
+}
+
+.demo-klein[aria-pressed="true"] {
+  border-color: rgba(255, 107, 90, .55);
+  background: rgba(226, 59, 59, .16);
+  color: #ffd0c8;
+}
+
+.demo-segmente {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 3px;
+  padding: 3px;
+  border-radius: 999px;
+  background: var(--bg-2);
+}
+
+.demo-seg {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 32px;
+  padding: 0 14px;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--text-2);
+  font-size: 13.5px;
+  font-weight: 600;
+  white-space: nowrap;
+  transition: background-color var(--t-kurz) ease, color var(--t-kurz) ease;
+}
+
+.demo-seg:hover {
+  background: var(--bg-3);
+  color: var(--text);
+}
+
+/* Etwas dunkleres Rot als im Launcher, damit weiße Schrift 4,5:1 hat. */
+.demo-seg[aria-pressed="true"],
+.demo-seg[aria-selected="true"] {
+  background: #d13434;
+  color: #fff;
+}
+
+/* In FUSE (Download) gibt es Suchen/Installiert und Updates nur bei
+   Mods. Bei Texturen/Shader blenden sie aus, der Platz bleibt. */
+.demo-blendbar {
+  transition: opacity var(--t-mittel) ease;
+}
+
+.demo-blendbar.weg {
+  opacity: 0;
+  visibility: hidden;
+}
+
+.demo-wahl {
+  position: relative;
+  display: block;
+  flex: 1;
+  min-width: 0;
+}
+
+.demo-wahl-kurz {
+  flex: none;
+  width: 190px;
+  max-width: 100%;
+}
+
+.demo-wahl::after {
+  content: "";
+  position: absolute;
+  right: 15px;
+  top: 50%;
+  width: 7px;
+  height: 7px;
+  margin-top: -6px;
+  border-right: 2px solid var(--text-2);
+  border-bottom: 2px solid var(--text-2);
+  transform: rotate(45deg);
+  pointer-events: none;
+}
+
+.demo-wahl select,
+.demo-eingabe,
+.demo-suche {
+  width: 100%;
+  min-height: 40px;
+  padding: 0 14px;
+  border-radius: 8px;
+  border: 1px solid transparent;
+  background: var(--bg-3);
+  color: var(--text);
+  font-size: 14px;
+  transition: border-color var(--t-kurz) ease;
+}
+
+.demo-wahl select {
+  padding-right: 38px;
+  -webkit-appearance: none;
+  appearance: none;
+  cursor: pointer;
+}
+
+.demo-wahl select option {
+  background: var(--bg-2);
+  color: var(--text);
+}
+
+.demo-wahl select:hover,
+.demo-eingabe:hover,
+.demo-suche:hover {
+  border-color: var(--rand-hell);
+}
+
+.demo-wahl select:focus-visible,
+.demo-eingabe:focus-visible,
+.demo-suche:focus-visible {
+  border-color: var(--akzent);
+  outline-offset: 2px;
+}
+
+.demo-eingabe::placeholder,
+.demo-suche::placeholder {
+  color: #7d8799;
+}
+
+.demo-reihe {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+/* ---------- Spielen ---------- */
+
+/* Der kurze Hinweis oben links, wo man die Edition wechselt. Ohne
+   JavaScript gibt es kein Menü – dann auch keinen Hinweis. */
+.demo-tipps-oben {
+  align-self: flex-start;
+  max-width: 100%;
+}
+
+.demo-tipps-oben li {
+  flex: 0 1 auto;
+}
+
+.demo:not(.demo-an) .demo-tipps-oben {
+  display: none;
+}
+
+.demo-tipps-oben strong {
+  color: var(--text);
+  font-weight: 700;
+}
+
+.demo-pfeilzeichen {
+  display: inline-block;
+  padding: 0 5px;
+  border-radius: 4px;
+  background: rgba(255, 255, 255, .07);
+  color: var(--text);
+  font-weight: 800;
+}
+
+/* Die Karte steht mittig im freien Platz, SPIELEN unten – wie in FUSE. */
+.demo-mitte {
+  display: grid;
+  align-content: center;
+  flex: 1 0 auto;
+}
+
+.demo-felder {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px 16px;
+  margin-top: 14px;
+}
+
+.demo-feld {
+  display: grid;
+  gap: 6px;
+  min-width: 0;
+}
+
+.demo-feld label {
+  color: var(--text-2);
+  font-size: 13px;
+}
+
+.demo-feld-breit {
+  grid-column: 1 / -1;
+}
+
+.demo-feld-breit .demo-reihe {
+  flex-wrap: nowrap;
+}
+
+.demo-passt {
+  margin-top: 12px;
+  color: var(--warn);
+}
+
+.demo-bedrock-kopf {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 12px;
+}
+
+.demo-lampe {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  margin-top: 2px;
+  color: var(--gut);
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.demo-lampe::before {
+  content: "";
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--gut);
+  box-shadow: 0 0 8px rgba(61, 220, 132, .6);
+}
+
+.demo-start {
+  display: grid;
+  justify-items: center;
+  align-content: center;
+  gap: 3px;
+  flex: none;
+  width: 100%;
+  min-height: 84px;
+  padding: 12px;
+  border: 0;
+  border-radius: 8px;
+  background: linear-gradient(135deg, #cc3131, #dc4639);
+  color: #fff;
+  box-shadow: 0 18px 56px rgba(226, 59, 59, .24);
+  transition: transform var(--t-mittel) var(--kurve), box-shadow var(--t-mittel) ease;
+}
+
+.demo-start:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 18px 76px rgba(226, 59, 59, .38);
+}
+
+.demo-start:active {
+  transform: scale(.985);
+}
+
+.demo-start-haupt {
+  font-size: 26px;
+  font-weight: 900;
+  line-height: 1.05;
+  letter-spacing: .5px;
+}
+
+.demo-start-unter {
+  font-size: 13px;
+  font-weight: 600;
+}
+
+/* ---------- Erklär-Hinweise ---------- */
+
+.demo-tipps {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  flex: none;
+  padding: 0;
+  list-style: none;
+}
+
+/* Nach Listen/Karten rutschen die Hinweise ganz nach unten. */
+.demo-liste + .demo-tipps,
+.demo-log + .demo-tipps,
+.demo-skins + .demo-tipps,
+.demo-einst + .demo-tipps {
+  margin-top: auto;
+}
+
+.demo-tipps li {
+  position: relative;
+  flex: 1 1 200px;
+  padding: 8px 12px 8px 37px;
+  border-radius: 10px;
+  border: 1px dashed rgba(255, 107, 90, .38);
+  background: rgba(226, 59, 59, .07);
+  color: var(--text-3);
+  font-size: 12.5px;
+  line-height: 1.45;
+}
+
+.demo-tipps li::before {
+  content: "i";
+  position: absolute;
+  left: 12px;
+  top: 10px;
+  display: grid;
+  place-items: center;
+  width: 17px;
+  height: 17px;
+  border-radius: 50%;
+  background: rgba(255, 107, 90, .2);
+  color: #ffb3a8;
+  font-size: 11px;
+  font-weight: 800;
+  line-height: 1;
+}
+
+.demo-code {
+  font-family: var(--mono);
+  font-size: .95em;
+  color: var(--text);
+  white-space: nowrap;
+}
+
+/* ---------- Werkzeugzeile und Listen ---------- */
+
+.demo-werkzeug {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px 10px;
+  flex: none;
+}
+
+.demo-werkzeug > .demo-titel {
+  flex: 1 1 auto;
+  min-width: 0;
+  margin-right: auto;
+}
+
+.demo-suche {
+  flex: 1 1 160px;
+  width: auto;
+  min-width: 140px;
+}
+
+.demo-liste {
+  display: grid;
+  align-content: start;
+  gap: 8px;
+  flex: 1 1 auto;
+  min-height: 0;
+  /* Rand für Fokusringe; rechts nur so weit, wie der Bereich Polster hat
+     (sonst entsteht ein waagrechter Scrollbalken). */
+  padding: 2px 5px 2px 2px;
+  margin: -2px -3px -2px -2px;
+  overflow: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--rand-hell) transparent;
+}
+
+.demo-liste:focus {
+  outline: none;
+}
+
+.demo-mod {
+  display: grid;
+  grid-template-columns: 44px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 14px;
+  padding: 12px 14px;
+  border-radius: 12px;
+  background: var(--bg-2);
+  transition: opacity var(--t-mittel) ease;
+}
+
+.demo-mod.aus {
+  opacity: .5;
+}
+
+.demo-kachel {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 900;
+  letter-spacing: .3px;
+}
+
+.k-sand { background: #d8c6a2; color: #3b2f1a; }
+.k-gruen { background: #5fbf6a; color: #0d2a12; }
+.k-bunt { background: linear-gradient(135deg, #e2556b, #e9a23b 35%, #3fb59a 65%, #5a7be0); color: #fff; text-shadow: 0 1px 2px rgba(0, 0, 0, .45); }
+.k-grau { background: #646c7c; color: #fff; }
+.k-gelb { background: #e3df6a; color: #2b2a06; }
+.k-lila { background: #8a63d2; color: #fff; }
+.k-orange { background: #e58a3a; color: #2d1604; }
+.k-tuerkis { background: #2fb3a6; color: #04211e; }
+.k-rosa { background: #d65f93; color: #fff; }
+.k-dunkelblau { background: #3a5aa0; color: #fff; }
+
+.demo-mod-text {
+  min-width: 0;
+}
+
+.demo-mod-text h4 {
+  font-size: 14.5px;
+  font-weight: 800;
+  color: var(--text);
+}
+
+.demo-mod-text p {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: var(--text-3);
+  font-size: 13px;
+}
+
+.demo-mod-text .demo-meta {
+  color: var(--text-2);
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
+}
+
+.demo-datei {
+  font-family: var(--mono);
+  font-size: 11.5px;
+}
+
+.demo-mod-knoepfe {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* „Ausschalten“ und Dateiname gibt es nur in „Installiert“. */
+.demo-liste:not(.ist-installiert) .demo-aus,
+.demo-liste:not(.ist-installiert) .demo-datei {
+  display: none;
+}
+
+.demo-install {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-width: 118px;
+  min-height: 36px;
+  padding: 0 14px;
+  border-radius: 8px;
+  border: 1px solid var(--rand);
+  background: var(--bg-3);
+  color: var(--text);
+  font-size: 13.5px;
+  font-weight: 600;
+  white-space: nowrap;
+  transition: background-color var(--t-kurz) ease, border-color var(--t-kurz) ease, color var(--t-kurz) ease;
+}
+
+.demo-install:hover {
+  background: #232834;
+  border-color: var(--rand-hell);
+}
+
+.demo-install .t-an {
+  display: none;
+}
+
+.demo-install[aria-pressed="true"] {
+  border-color: rgba(61, 220, 132, .3);
+  background: rgba(61, 220, 132, .12);
+  color: #8ff0b8;
+}
+
+.demo-install[aria-pressed="true"] .t-neu {
+  display: none;
+}
+
+.demo-install[aria-pressed="true"] .t-an {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+}
+
+/* Gezeichneter Haken (CSS), kein Schriftzeichen. */
+.demo-install[aria-pressed="true"] .t-an::before {
+  content: "";
+  width: 9px;
+  height: 5px;
+  margin-top: -3px;
+  border-left: 2px solid currentColor;
+  border-bottom: 2px solid currentColor;
+  transform: rotate(-45deg);
+}
+
+.demo-vanilla .demo-einst-titel {
+  margin-bottom: 4px;
+}
+
+.demo-leer {
+  padding: 6px 4px;
+}
+
+/* ---------- Welten ---------- */
+
+.demo-kopfzeile {
+  margin: 8px 0 0;
+  color: var(--text-2);
+  font-size: 11.5px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+.demo-kopfzeile:first-child {
+  margin-top: 0;
+}
+
+.demo-kopfzeile-mit {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-top: 6px;
+}
+
+.demo-kopfzeile-mit .demo-kopfzeile {
+  margin: 0;
+}
+
+.demo-zeile {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 10px;
+  border: 1px solid var(--rand);
+  border-radius: 10px;
+  background: var(--bg-2);
+}
+
+.demo-platzhalter {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 38px;
+  height: 38px;
+  border-radius: 8px;
+  background: var(--bg-3);
+}
+
+.demo-platzhalter svg {
+  width: 19px;
+  height: 19px;
+  fill: var(--text-2);
+  opacity: .4;
+}
+
+.demo-zeile-text {
+  display: grid;
+  gap: 1px;
+  flex: 1;
+  min-width: 0;
+}
+
+.demo-zeile-name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-weight: 650;
+  color: var(--text);
+}
+
+.demo-zeile-klein {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: var(--text-2);
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
+}
+
+.demo-play {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  flex: none;
+  min-height: 34px;
+  padding: 0 14px;
+  border: 0;
+  border-radius: 8px;
+  background: var(--gut);
+  color: #04240f;
+  font-size: 13.5px;
+  font-weight: 700;
+}
+
+.demo-play:hover {
+  filter: brightness(1.08);
+}
+
+.demo-play svg {
+  width: 13px;
+  height: 13px;
+  fill: currentColor;
+}
+
+/* ---------- Screenshots ---------- */
+
+.demo-fotos {
+  grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
+  gap: 10px;
+}
+
+.demo-foto {
+  display: grid;
+  gap: 4px;
+  min-width: 0;
+  padding: 8px;
+  border: 1px solid var(--rand);
+  border-radius: 10px;
+  background: var(--bg-2);
+  text-align: left;
+  transition: border-color var(--t-kurz) ease, transform var(--t-mittel) var(--kurve);
+}
+
+.demo-foto:hover {
+  border-color: var(--rand-hell);
+  transform: translateY(-2px);
+}
+
+/* Bilder sind nur Farbverläufe – keine Spielgrafik. */
+.demo-foto-bild {
+  display: block;
+  aspect-ratio: 16 / 9;
+  margin-bottom: 2px;
+  border-radius: 6px;
+}
+
+.b-abend {
+  background:
+    radial-gradient(circle at 70% 62%, #ffd27a 0 7%, transparent 8%),
+    linear-gradient(180deg, transparent 66%, #3b2a3f 66%),
+    linear-gradient(180deg, #4b3a78, #c55b6a 55%, #f29a5e);
+}
+
+.b-meer {
+  background:
+    linear-gradient(180deg, transparent 58%, #2a6fa0 58%, #184a73),
+    linear-gradient(180deg, #7cc3ee, #c4e6f7);
+}
+
+.b-nacht {
+  background:
+    radial-gradient(circle at 22% 28%, #fff 0 1.2%, transparent 1.6%),
+    radial-gradient(circle at 64% 18%, #fff 0 1%, transparent 1.4%),
+    radial-gradient(circle at 82% 36%, #dfe7ff 0 1.3%, transparent 1.7%),
+    radial-gradient(circle at 76% 24%, #f4f1d0 0 6%, transparent 6.5%),
+    linear-gradient(180deg, transparent 70%, #151a2b 70%),
+    linear-gradient(180deg, #0c1230, #26305e);
+}
+
+.b-wald {
+  background:
+    linear-gradient(180deg, transparent 52%, #3e8a4f 52%, #24603a),
+    linear-gradient(180deg, #a6d8ef, #e3f2e0);
+}
+
+.b-morgen {
+  background:
+    radial-gradient(circle at 24% 70%, #fff3c4 0 8%, transparent 9%),
+    linear-gradient(180deg, transparent 72%, #5a6f8f 72%, #3e4f6b),
+    linear-gradient(180deg, #f6c6a8, #f3e1c9 60%, #d9e6f2);
+}
+
+.b-wueste {
+  background:
+    linear-gradient(180deg, transparent 60%, #e2bf7a 60%, #c99a52),
+    linear-gradient(180deg, #8fc7ea, #d8eef7);
+}
+
+.demo-foto-name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text);
+}
+
+/* ---------- Skins ---------- */
+
+.demo-skins {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 300px);
+  gap: 18px;
+  flex: none;
+}
+
+.demo-skin-sammlung {
+  display: grid;
+  align-content: start;
+  gap: 14px;
+  min-width: 0;
+}
+
+.demo-skin-liste {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(96px, 1fr));
+  gap: 10px;
+}
+
+.demo-skin {
+  display: grid;
+  justify-items: center;
+  gap: 8px;
+  padding: 14px 8px 10px;
+  border: 1px solid var(--rand);
+  border-radius: 10px;
+  background: var(--bg-2);
+  color: var(--text-3);
+  font-size: 13px;
+  font-weight: 600;
+  transition: border-color var(--t-kurz) ease;
+}
+
+.demo-skin:hover {
+  border-color: var(--rand-hell);
+}
+
+.demo-skin[aria-pressed="true"] {
+  border-color: var(--akzent);
+  color: var(--text);
+}
+
+/* Farben der Beispiel-Figuren (eigene Gliederpuppe, kein Skin). */
+.farbe-rot { --hemd: #d84444; --hose: #3a3f4b; }
+.farbe-blau { --hemd: #4a7fd6; --hose: #2d3340; }
+.farbe-gruen { --hemd: #35b874; --hose: #2b4237; }
+
+.mini-figur {
+  display: grid;
+  justify-items: center;
+}
+
+.mini-figur i {
+  display: block;
+}
+
+.mini-figur i:nth-child(1) { width: 16px; height: 16px; border-radius: 3px; background: #c9cfd8; }
+.mini-figur i:nth-child(2) { width: 26px; height: 22px; background: var(--hemd); }
+.mini-figur i:nth-child(3) { width: 16px; height: 20px; background: var(--hose); }
+
+.demo-skin-vorschau {
+  display: grid;
+  align-content: start;
+  gap: 12px;
+  min-width: 0;
+}
+
+.demo-figur-platz {
+  display: grid;
+  place-items: center;
+  height: 250px;
+  border-radius: 12px;
+  background:
+    radial-gradient(ellipse 30% 6% at 50% 90%, rgba(0, 0, 0, .5), transparent),
+    var(--bg-2);
+}
+
+.demo-figur {
+  position: relative;
+  width: 112px;
+  height: 216px;
+}
+
+.demo-figur > span {
+  position: absolute;
+  transition: transform var(--t-mittel) var(--kurve), width var(--t-mittel) ease, left var(--t-mittel) ease, opacity var(--t-mittel) ease;
+}
+
+.f-kopf { left: 32px; top: 0; width: 48px; height: 48px; border-radius: 6px; background: #c9cfd8; box-shadow: inset 0 -6px 0 rgba(0, 0, 0, .1); }
+.f-koerper { left: 32px; top: 50px; width: 48px; height: 70px; border-radius: 3px; background: var(--hemd); }
+.f-arm { top: 50px; width: 22px; height: 70px; border-radius: 3px; background: var(--hemd); filter: brightness(.86); }
+.f-al { left: 8px; }
+.f-ar { left: 82px; }
+.f-bein { top: 122px; width: 23px; height: 92px; border-radius: 3px; background: var(--hose); }
+.f-bl { left: 32px; }
+.f-br { left: 57px; }
+
+/* Slim: schmalere Arme. */
+.demo-figur.schmal .f-arm { width: 17px; }
+.demo-figur.schmal .f-al { left: 13px; }
+
+/* Schild (neutral, eigene Form) und Flügel (Elytra) zum Anprobieren. */
+.f-schild {
+  left: -6px;
+  top: 74px;
+  width: 34px;
+  height: 46px;
+  border-radius: 4px 4px 16px 16px;
+  border: 3px solid #4b5363;
+  background: linear-gradient(135deg, #8a93a3, #69717f);
+  opacity: 0;
+}
+
+.f-fluegel {
+  top: 46px;
+  width: 54px;
+  height: 120px;
+  background: linear-gradient(180deg, #8d95a6, #5d6574);
+  opacity: 0;
+}
+
+.f-fl { left: -14px; clip-path: polygon(100% 0, 0 12%, 16% 100%, 100% 70%); }
+.f-fr { left: 72px; clip-path: polygon(0 0, 100% 12%, 84% 100%, 0 70%); }
+
+.demo-figur.schild .f-schild,
+.demo-figur.fluegel .f-fluegel {
+  opacity: 1;
+}
+
+/* Schleichen: Oberkörper geht runter, Beine knicken. */
+.demo-figur.schleicht .f-kopf,
+.demo-figur.schleicht .f-koerper,
+.demo-figur.schleicht .f-arm,
+.demo-figur.schleicht .f-schild,
+.demo-figur.schleicht .f-fluegel {
+  transform: translateY(12px);
+}
+
+.demo-figur.schleicht .f-bein {
+  transform: translateY(12px) scaleY(.87);
+  transform-origin: top;
+}
+
+.demo-anprobe {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.demo-skin-unten {
+  justify-content: space-between;
+}
+
+.demo-haupt-knopf {
+  min-height: 38px;
+  padding: 0 18px;
+  border: 0;
+  border-radius: 8px;
+  background: #d13434;
+  color: #fff;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.demo-haupt-knopf:hover {
+  background: #dd3d3d;
+}
+
+/* ---------- Logs ---------- */
+
+.demo-log {
+  flex: 1 1 auto;
+  min-height: 0;
+  padding: 12px 14px;
+  border-radius: 10px;
+  border: 1px solid var(--rand);
+  background: #0a0c10;
+  overflow: auto;
+  font-family: var(--mono);
+  font-size: 12.5px;
+  line-height: 1.75;
+  color: var(--text-3);
+}
+
+.demo-log p {
+  overflow-wrap: anywhere;
+}
+
+.l-quelle,
+.l-zeit {
+  color: var(--text-2);
+}
+
+.demo-log [data-stufe="warnung"] .l-stufe {
+  color: var(--warn);
+}
+
+.demo-log [data-stufe="fehler"] {
+  color: #ffb3a8;
+}
+
+.demo-log [data-stufe="fehler"] .l-stufe {
+  color: #ff7b6b;
+}
+
+.demo-log .demo-log-leer {
+  font-family: var(--schrift);
+}
+
+/* ---------- Einstellungen ---------- */
+
+.demo-einst-reiter {
+  align-self: flex-start;
+  flex: none;
+}
+
+.demo-einst {
+  display: grid;
+  gap: 16px;
+  flex: none;
+  padding: 18px 22px;
+}
+
+.demo-einst-zeile {
+  display: grid;
+  gap: 6px;
+}
+
+.demo-einst-titel {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text);
+}
+
+.demo-regler {
+  width: 100%;
+  max-width: 420px;
+  accent-color: var(--akzent);
+}
+
+.demo-zahl {
+  width: 110px;
+}
+
+.demo-mal {
+  color: var(--text-2);
+}
+
+.demo-einst .demo-eingabe:not(.demo-zahl) {
+  flex: 1 1 220px;
+  width: auto;
+  max-width: 420px;
+}
+
+.demo-warnung {
+  padding: 8px 12px;
+  border-radius: 8px;
+  background: rgba(245, 165, 36, .1);
+  border: 1px solid rgba(245, 165, 36, .3);
+  color: #f8c66e;
+  font-size: 12.5px;
+}
+
+/* ---------- Meldung (wie ein FUSE-Toast) ---------- */
+
+.demo-meldung-ort {
+  position: absolute;
+  right: 20px;
+  bottom: 16px;
+  z-index: 5;
+  width: min(380px, calc(100% - 40px));
+}
+
+.demo-meldung {
+  position: relative;
+  padding: 13px 44px 13px 15px;
+  border-radius: 12px;
+  border: 1px solid var(--rand-hell);
+  border-left: 3px solid var(--akzent-2);
+  background: var(--bg-3);
+  box-shadow: 0 18px 40px rgba(0, 0, 0, .55);
+  color: var(--text);
+  font-size: 13.5px;
+}
+
+.demo-meldung-link {
+  display: inline-flex;
+  align-items: center;
+  min-height: 34px;
+  margin-top: 8px;
+  padding: 0 14px;
+  border-radius: 8px;
+  background: #d13434;
+  color: #fff;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.demo-meldung-link:hover {
+  color: #fff;
+  background: #dd3d3d;
+}
+
+.demo-meldung-zu {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--text-2);
+  font-size: 15px;
+}
+
+.demo-meldung-zu:hover {
+  background: rgba(255, 255, 255, .06);
+  color: var(--text);
+}
+
+/* ---------- Unter dem Fenster ---------- */
+
+.demo-ohne-js,
+.demo-unter {
+  margin-top: 12px;
+  color: var(--text-2);
+  font-size: 14px;
+  text-align: center;
+}
+
+.demo-ohne-js {
+  margin-top: 16px;
+  color: var(--warn);
+}
+
+/* demo.js setzt .demo-an – dann ist der Hinweis überflüssig. */
+.demo.demo-an .demo-ohne-js {
+  display: none;
+}
+
+/* Der neue Bereich blendet sanft ein (nur ohne „weniger Bewegung“). */
+@media (prefers-reduced-motion: no-preference) {
+  .demo.demo-an .demo-bereich:not([hidden]) {
+    animation: demo-rein 200ms var(--kurve);
+  }
+
+  @keyframes demo-rein {
+    from {
+      opacity: 0;
+      transform: translateY(6px);
+    }
+  }
+}
+
+/* Weniger Bewegung: auch kein Hüpfen beim Darüberfahren (wie bei .karte). */
+@media (prefers-reduced-motion: reduce) {
+  .demo-start:hover,
+  .demo-start:active,
+  .demo-foto:hover {
+    transform: none;
+  }
+}
+
+/* ---------- Breiten für die Vorschau ---------- */
+
+@media (max-width: 959px) {
+  .demo-skins {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 250px);
+  }
+
+  .demo-figur-platz {
+    height: 230px;
+  }
+}
+
+@media (max-width: 900px) {
+  .demo-haupt {
+    padding: 12px 16px 14px;
+  }
+
+  .demo-mod {
+    grid-template-columns: 40px minmax(0, 1fr) auto;
+    gap: 12px;
+    padding: 10px 12px;
+  }
+
+  .demo-kachel {
+    width: 40px;
+    height: 40px;
+  }
+
+  .demo-install {
+    min-width: 0;
+  }
+
+  .demo-karte {
+    padding: 18px;
+  }
+}
+
+/* Handy: statt der Vorschau das echte Bild. */
+@media (max-width: 759px) {
+  .demo,
+  .nur-demo {
+    display: none;
+  }
+}
+
+@media (min-width: 760px) {
+  .demo-handy,
+  .nur-handy {
+    display: none;
+  }
+}
