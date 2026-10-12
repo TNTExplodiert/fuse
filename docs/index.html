@@ -83,9 +83,13 @@
       <!-- Live-Vorschau: ein schlanker Nachbau des FUSE-Fensters (eigenes
            Markup, eigenes CSS, eigenes demo.js – kein Code aus FUSE).
            Alles Beispieldaten, nichts startet, nichts wird geladen.
-           Inhalte nur, was der aktuelle Download kann (Bau 75): bei
-           Texturen/Shader gibt es dort noch kein „Installiert“ und keine
-           Updates – deshalb blendet die Vorschau beides dort aus.
+           Inhalte nur, was der aktuelle Download kann (Bau 76): seitdem
+           gibt es „Installiert“ und „Auf Updates prüfen“ auch bei
+           Texturen/Shader – aber KEINEN An/Aus-Schalter (den hat FUSE
+           dort nicht; welches Paket aktiv ist, wählt man im Spiel).
+           Seit Bau 78 (eingebaute Client-ID): Microsoft-Anmeldung bei allen –
+           Skins › Anziehen und Server › Play erklären das so, dazu
+           „Angemeldet bleiben“ unter Einstellungen › Launcher.
            Ohne JavaScript: nur „Spielen“ sichtbar + Hinweis.
            Unter 760 px: statt der Vorschau das echte Bild (.demo-handy). -->
       <section id="ausprobieren" class="abschnitt abschnitt-demo" aria-labelledby="demo-titel">
@@ -276,11 +280,11 @@
                         <button class="demo-seg" type="button" data-art="textur" aria-pressed="false">Texturen</button>
                         <button class="demo-seg" type="button" data-art="shader" aria-pressed="false">Shader</button>
                       </div>
-                      <div class="demo-segmente demo-blendbar" role="group" aria-label="Ansicht">
+                      <div class="demo-segmente" role="group" aria-label="Ansicht">
                         <button class="demo-seg" type="button" data-ansicht="suchen" aria-pressed="true">Suchen</button>
                         <button class="demo-seg" type="button" data-ansicht="installiert" aria-pressed="false">Installiert</button>
                       </div>
-                      <button class="demo-klein demo-blendbar" type="button" data-info="In FUSE vergleicht das deine installierten Mods mit Modrinth und zeigt, wofür es neuere Fassungen gibt – Aktualisieren mit einem Klick.">Auf Updates prüfen</button>
+                      <button class="demo-klein" type="button" id="demo-upd-knopf" aria-haspopup="dialog">Auf Updates prüfen</button>
                     </div>
 
                     <div class="demo-liste" id="demo-mod-liste" tabindex="-1">
@@ -293,7 +297,7 @@
                         </div>
                         <div class="demo-mod-knoepfe">
                           <button class="demo-klein demo-aus" type="button">Ausschalten</button>
-                          <button class="demo-install" type="button" aria-pressed="true"><span class="t-neu">Installieren</span><span class="t-an">Installiert</span></button>
+                          <button class="demo-install" type="button" aria-pressed="true"><span class="t-neu">Installieren</span><span class="t-an">Installiert</span><span class="t-weg">Entfernen</span></button>
                         </div>
                       </article>
                       <article class="demo-mod" data-art="mod" data-name="sodium" data-installiert="ja">
@@ -305,7 +309,7 @@
                         </div>
                         <div class="demo-mod-knoepfe">
                           <button class="demo-klein demo-aus" type="button">Ausschalten</button>
-                          <button class="demo-install" type="button" aria-pressed="true"><span class="t-neu">Installieren</span><span class="t-an">Installiert</span></button>
+                          <button class="demo-install" type="button" aria-pressed="true"><span class="t-neu">Installieren</span><span class="t-an">Installiert</span><span class="t-weg">Entfernen</span></button>
                         </div>
                       </article>
                       <article class="demo-mod" data-art="mod" data-name="iris shaders" data-installiert="nein">
@@ -317,7 +321,7 @@
                         </div>
                         <div class="demo-mod-knoepfe">
                           <button class="demo-klein demo-aus" type="button">Ausschalten</button>
-                          <button class="demo-install" type="button" aria-pressed="false"><span class="t-neu">Installieren</span><span class="t-an">Installiert</span></button>
+                          <button class="demo-install" type="button" aria-pressed="false"><span class="t-neu">Installieren</span><span class="t-an">Installiert</span><span class="t-weg">Entfernen</span></button>
                         </div>
                       </article>
                       <article class="demo-mod" data-art="mod" data-name="entity culling" data-installiert="nein">
@@ -329,7 +333,7 @@
                         </div>
                         <div class="demo-mod-knoepfe">
                           <button class="demo-klein demo-aus" type="button">Ausschalten</button>
-                          <button class="demo-install" type="button" aria-pressed="false"><span class="t-neu">Installieren</span><span class="t-an">Installiert</span></button>
+                          <button class="demo-install" type="button" aria-pressed="false"><span class="t-neu">Installieren</span><span class="t-an">Installiert</span><span class="t-weg">Entfernen</span></button>
                         </div>
                       </article>
                       <article class="demo-mod" data-art="mod" data-name="cloth config api" data-installiert="ja">
@@ -341,7 +345,7 @@
                         </div>
                         <div class="demo-mod-knoepfe">
                           <button class="demo-klein demo-aus" type="button">Ausschalten</button>
-                          <button class="demo-install" type="button" aria-pressed="true"><span class="t-neu">Installieren</span><span class="t-an">Installiert</span></button>
+                          <button class="demo-install" type="button" aria-pressed="true"><span class="t-neu">Installieren</span><span class="t-an">Installiert</span><span class="t-weg">Entfernen</span></button>
                         </div>
                       </article>
                       <article class="demo-mod" data-art="mod" data-name="mod menu" data-installiert="nein">
@@ -353,30 +357,33 @@
                         </div>
                         <div class="demo-mod-knoepfe">
                           <button class="demo-klein demo-aus" type="button">Ausschalten</button>
-                          <button class="demo-install" type="button" aria-pressed="false"><span class="t-neu">Installieren</span><span class="t-an">Installiert</span></button>
+                          <button class="demo-install" type="button" aria-pressed="false"><span class="t-neu">Installieren</span><span class="t-an">Installiert</span><span class="t-weg">Entfernen</span></button>
                         </div>
                       </article>
 
-                      <article class="demo-mod" data-art="textur" data-name="faithful 32x" data-installiert="nein">
+                      <!-- Texturen/Shader: Dateiname und Update-Beispiel (data-neu =
+                           neuere Datei bei „Auf Updates prüfen“). Wie in FUSE ohne
+                           An/Aus-Schalter. data-fremd = liegt nur im Ordner. -->
+                      <article class="demo-mod" data-art="textur" data-name="faithful 32x" data-installiert="ja">
                         <span class="demo-kachel k-orange" aria-hidden="true">F3</span>
                         <div class="demo-mod-text">
                           <h4>Faithful 32x</h4>
                           <p>Die bekannten Texturen, nur doppelt so scharf.</p>
-                          <p class="demo-meta">25.412.880 Downloads</p>
+                          <p class="demo-meta">25.412.880 Downloads<span class="demo-datei"> · Faithful 32x - 1.21.8.zip</span></p>
                         </div>
                         <div class="demo-mod-knoepfe">
-                          <button class="demo-install" type="button" aria-pressed="false"><span class="t-neu">Installieren</span><span class="t-an">Installiert</span></button>
+                          <button class="demo-install" type="button" aria-pressed="true"><span class="t-neu">Installieren</span><span class="t-an">Installiert</span><span class="t-weg">Entfernen</span></button>
                         </div>
                       </article>
-                      <article class="demo-mod" data-art="textur" data-name="fresh animations" data-installiert="nein">
+                      <article class="demo-mod" data-art="textur" data-name="fresh animations" data-installiert="ja" data-neu="FreshAnimations_v1.10.zip">
                         <span class="demo-kachel k-tuerkis" aria-hidden="true">FR</span>
                         <div class="demo-mod-text">
                           <h4>Fresh Animations</h4>
                           <p>Tiere und Monster bewegen sich lebendiger.</p>
-                          <p class="demo-meta">18.940.311 Downloads</p>
+                          <p class="demo-meta">18.940.311 Downloads<span class="demo-datei"> · FreshAnimations_v1.9.3.zip</span></p>
                         </div>
                         <div class="demo-mod-knoepfe">
-                          <button class="demo-install" type="button" aria-pressed="false"><span class="t-neu">Installieren</span><span class="t-an">Installiert</span></button>
+                          <button class="demo-install" type="button" aria-pressed="true"><span class="t-neu">Installieren</span><span class="t-an">Installiert</span><span class="t-weg">Entfernen</span></button>
                         </div>
                       </article>
                       <article class="demo-mod" data-art="textur" data-name="stay true" data-installiert="nein">
@@ -384,22 +391,33 @@
                         <div class="demo-mod-text">
                           <h4>Stay True</h4>
                           <p>Natürlichere Blöcke, nah am Original.</p>
-                          <p class="demo-meta">6.205.774 Downloads</p>
+                          <p class="demo-meta">6.205.774 Downloads<span class="demo-datei"> · Stay-True-1.21.8.zip</span></p>
                         </div>
                         <div class="demo-mod-knoepfe">
-                          <button class="demo-install" type="button" aria-pressed="false"><span class="t-neu">Installieren</span><span class="t-an">Installiert</span></button>
+                          <button class="demo-install" type="button" aria-pressed="false"><span class="t-neu">Installieren</span><span class="t-an">Installiert</span><span class="t-weg">Entfernen</span></button>
+                        </div>
+                      </article>
+                      <article class="demo-mod" data-art="textur" data-name="rotes pvp paket" data-installiert="ja" data-fremd="ja">
+                        <span class="demo-kachel k-grau" aria-hidden="true">RP</span>
+                        <div class="demo-mod-text">
+                          <h4>Rotes PvP Paket</h4>
+                          <p>Liegt im Ordner, nicht von FUSE geladen</p>
+                          <p class="demo-meta"><span class="demo-datei">Rotes-PvP-Paket.zip</span></p>
+                        </div>
+                        <div class="demo-mod-knoepfe">
+                          <button class="demo-install" type="button" aria-pressed="true"><span class="t-neu">Installieren</span><span class="t-an">Installiert</span><span class="t-weg">Entfernen</span></button>
                         </div>
                       </article>
 
-                      <article class="demo-mod" data-art="shader" data-name="complementary reimagined" data-installiert="nein">
+                      <article class="demo-mod" data-art="shader" data-name="complementary reimagined" data-installiert="ja" data-neu="ComplementaryReimagined_r5.6.zip">
                         <span class="demo-kachel k-dunkelblau" aria-hidden="true">CR</span>
                         <div class="demo-mod-text">
                           <h4>Complementary Reimagined</h4>
                           <p>Warmes Licht, schöne Wolken und Wasser.</p>
-                          <p class="demo-meta">14.802.196 Downloads</p>
+                          <p class="demo-meta">14.802.196 Downloads<span class="demo-datei"> · ComplementaryReimagined_r5.5.zip</span></p>
                         </div>
                         <div class="demo-mod-knoepfe">
-                          <button class="demo-install" type="button" aria-pressed="false"><span class="t-neu">Installieren</span><span class="t-an">Installiert</span></button>
+                          <button class="demo-install" type="button" aria-pressed="true"><span class="t-neu">Installieren</span><span class="t-an">Installiert</span><span class="t-weg">Entfernen</span></button>
                         </div>
                       </article>
                       <article class="demo-mod" data-art="shader" data-name="bsl shaders" data-installiert="nein">
@@ -407,10 +425,10 @@
                         <div class="demo-mod-text">
                           <h4>BSL Shaders</h4>
                           <p>Klassischer Look mit weichem Licht.</p>
-                          <p class="demo-meta">9.711.402 Downloads</p>
+                          <p class="demo-meta">9.711.402 Downloads<span class="demo-datei"> · BSL_v10.0.zip</span></p>
                         </div>
                         <div class="demo-mod-knoepfe">
-                          <button class="demo-install" type="button" aria-pressed="false"><span class="t-neu">Installieren</span><span class="t-an">Installiert</span></button>
+                          <button class="demo-install" type="button" aria-pressed="false"><span class="t-neu">Installieren</span><span class="t-an">Installiert</span><span class="t-weg">Entfernen</span></button>
                         </div>
                       </article>
                       <article class="demo-mod" data-art="shader" data-name="makeup ultra fast" data-installiert="nein">
@@ -418,10 +436,10 @@
                         <div class="demo-mod-text">
                           <h4>MakeUp – Ultra Fast</h4>
                           <p>Leichte Shader, laufen auch auf schwachen PCs.</p>
-                          <p class="demo-meta">4.380.957 Downloads</p>
+                          <p class="demo-meta">4.380.957 Downloads<span class="demo-datei"> · MakeUp-UltraFast-9.4.zip</span></p>
                         </div>
                         <div class="demo-mod-knoepfe">
-                          <button class="demo-install" type="button" aria-pressed="false"><span class="t-neu">Installieren</span><span class="t-an">Installiert</span></button>
+                          <button class="demo-install" type="button" aria-pressed="false"><span class="t-neu">Installieren</span><span class="t-an">Installiert</span><span class="t-weg">Entfernen</span></button>
                         </div>
                       </article>
 
@@ -433,8 +451,8 @@
                     </div>
 
                     <ul class="demo-tipps" aria-label="Erklärung zu „Mods“">
-                      <li>Mods, Texturen und Shader kommen direkt von Modrinth.</li>
-                      <li>Unter „Installiert“ schaltest du Mods aus und wieder ein, ohne sie zu löschen.</li>
+                      <li>Mods, Texturen und Shader kommen direkt von Modrinth – samt Updates.</li>
+                      <li>Mods schaltest du unter „Installiert“ aus und ein, Texturen und Shader im Spiel.</li>
                       <li>Jede Version hat mit jedem Loader ihren eigenen Mod-Ordner.</li>
                     </ul>
                   </div>
@@ -477,7 +495,7 @@
                           <span class="demo-zeile-name">LAN bei Kumpel</span>
                           <span class="demo-zeile-klein">192.168.178.20</span>
                         </div>
-                        <button class="demo-play" type="button" data-info="In FUSE verbindet das direkt mit dem Server. Online-Server brauchen ein Microsoft-Konto – die Anmeldung kommt erst noch.">
+                        <button class="demo-play" type="button" data-info="In FUSE verbindet das direkt mit dem Server. Für Online-Server meldest du dich in FUSE mit deinem Microsoft-Konto an – ohne Konto gehen nur Einzelspieler und LAN.">
                           <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 4v16l13-8z"/></svg> Play<span class="nur-vorlesen"> – LAN bei Kumpel</span>
                         </button>
                       </div>
@@ -590,14 +608,14 @@
                             <button class="demo-seg" type="button" data-form="breit" aria-pressed="true">Classic</button>
                             <button class="demo-seg" type="button" data-form="schmal" aria-pressed="false">Slim</button>
                           </div>
-                          <button class="demo-haupt-knopf" type="button" data-info="Anziehen lädt den Skin auf dein Minecraft-Konto – dafür braucht FUSE die Microsoft-Anmeldung, und die kommt erst noch.">Anziehen</button>
+                          <button class="demo-haupt-knopf" type="button" data-info="In FUSE lädt Anziehen den Skin auf dein Minecraft-Konto – dafür bist du mit deinem Microsoft-Konto angemeldet.">Anziehen</button>
                         </div>
                       </div>
                     </div>
                     <ul class="demo-tipps" aria-label="Erklärung zu „Skins“">
                       <li>Skins selbst malen oder als Datei laden.</li>
                       <li>3D-Vorschau zum Drehen – mit Rüstung, Elytra und Schild zum Anprobieren.</li>
-                      <li>Anziehen braucht die Microsoft-Anmeldung – die kommt bald.</li>
+                      <li>Anziehen lädt den Skin auf dein Minecraft-Konto – dafür meldest du dich in FUSE mit Microsoft an.</li>
                     </ul>
                   </div>
 
@@ -623,7 +641,7 @@
                       <p data-stufe="info"><span class="l-stufe">[INFO]</span> <span class="l-quelle">(java)</span> <span class="l-zeit">[18:30:42]</span> Java 21 ist schon da</p>
                       <p data-stufe="info"><span class="l-stufe">[INFO]</span> <span class="l-quelle">(backup)</span> <span class="l-zeit">[18:31:05]</span> Welten gesichert: 2 Welten, 96,8 MB</p>
                       <p data-stufe="info"><span class="l-stufe">[INFO]</span> <span class="l-quelle">(spiel)</span> <span class="l-zeit">[18:31:12]</span> Minecraft läuft</p>
-                      <p data-stufe="warnung"><span class="l-stufe">[WARNUNG]</span> <span class="l-quelle">(mods)</span> <span class="l-zeit">[18:52:12]</span> Auf Updates geprüft: Für Sodium gibt es eine neuere Fassung</p>
+                      <p data-stufe="warnung"><span class="l-stufe">[WARNUNG]</span> <span class="l-quelle">(mods)</span> <span class="l-zeit">[18:52:12]</span> Auf Updates geprüft: Für Fresh Animations (Texturen) gibt es eine neuere Fassung</p>
                       <p data-stufe="fehler"><span class="l-stufe">[FEHLER]</span> <span class="l-quelle">(modrinth)</span> <span class="l-zeit">[18:52:40]</span> Modrinth hat nicht geantwortet – später noch mal versuchen</p>
                       <p data-stufe="info"><span class="l-stufe">[INFO]</span> <span class="l-quelle">(spiel)</span> <span class="l-zeit">[19:14:09]</span> Minecraft beendet</p>
                       <p class="demo-hilfe demo-log-leer" hidden>Noch nichts passiert.</p>
@@ -706,6 +724,16 @@
                         </span>
                       </div>
                       <div class="demo-einst-zeile">
+                        <label class="demo-einst-titel" for="demo-bleiben">Angemeldet bleiben</label>
+                        <span class="demo-wahl demo-wahl-kurz">
+                          <select id="demo-bleiben">
+                            <option selected>Aus</option>
+                            <option>An</option>
+                          </select>
+                        </span>
+                        <p class="demo-hilfe">Dann musst du dich nach einem Neustart nicht neu bei Microsoft anmelden. Der Zugang liegt verschlüsselt auf deinem PC – auf einem geteilten PC lieber aus lassen.</p>
+                      </div>
+                      <div class="demo-einst-zeile">
                         <label class="demo-einst-titel" for="demo-experimentell">Experimental Mode</label>
                         <span class="demo-wahl demo-wahl-kurz">
                           <select id="demo-experimentell">
@@ -751,6 +779,20 @@
                 <div class="demo-meldung-ort" id="demo-meldung" role="status" aria-live="polite"></div>
               </div>
             </div>
+
+            <!-- Beispiel-Fenster „Auf Updates prüfen“ (Mods › oben rechts).
+                 Wie in FUSE ein Fenster für alle drei Arten; die Zeilen baut
+                 demo.js aus den Karten (data-neu). Lädt nichts. -->
+            <div class="demo-schatten" id="demo-upd" hidden>
+              <div class="demo-dialog" role="dialog" aria-modal="true" aria-labelledby="demo-upd-titel" tabindex="-1">
+                <div class="demo-dialog-kopf">
+                  <h3 class="demo-dialog-titel" id="demo-upd-titel">Mod-Updates</h3>
+                  <button class="demo-meldung-zu demo-dialog-zu" type="button" id="demo-upd-zu" aria-label="Fenster schließen">✕</button>
+                </div>
+                <div class="demo-upd-liste" id="demo-upd-liste"></div>
+                <p class="demo-hilfe demo-upd-hinweis" id="demo-upd-hinweis"></p>
+              </div>
+            </div>
           </div>
 
           <p class="demo-ohne-js">Ohne JavaScript zeigt die Vorschau nur den Bereich „Spielen“. Mit JavaScript kannst du links alle Bereiche anklicken.</p>
@@ -771,10 +813,15 @@
 
       <!-- Jede Karte ist gegen launcher/STAND.md („Was FUSE kann“ und die
            Bau-Abschnitte) bzw. den Quelltext geprüft und steckt im Download
-           (Bau 74, gilt auch für Bau 75). Die Microsoft-Anmeldung steht
-           deshalb NICHT hier (azure_id ist im Download leer).
-           „Ohne Konto spielen“ steht bewusst nicht als Werbe-Karte hier,
-           sondern nur ehrlich unter „Was noch nicht geht“ (mit Kauf-Hinweis). -->
+           (Bau 74, gilt auch für Bau 75 und 76). Die Microsoft-Anmeldung steht
+           seit Bau 78 hier: FUSE hat seitdem eine eingebaute, von Mojang
+           freigegebene Client-ID (launcher/STAND.md „Login für alle (Bau 78)“).
+           DIESE FASSUNG ERST HOCHLADEN, WENN BAU 78 VERÖFFENTLICHT IST – mit
+           Bau 77 geht die Anmeldung nur, wer selbst eine azure_id einträgt.
+           „Ohne Konto spielen“ steht bewusst nicht als eigene Werbe-Karte
+           hier, nur klein in der Anmelde-Karte (mit Kauf-Hinweis).
+           „Geht auch ohne Maus“ ist dafür unter „Außerdem drin“ gerutscht
+           (12 Karten = volle Reihen bei 3 und 2 Spalten). -->
       <section id="funktionen" class="abschnitt" aria-labelledby="funktionen-titel">
         <div class="abschnitt-kopf">
           <p class="etikett">Funktionen</p>
@@ -790,6 +837,12 @@
             <p class="klein">Forge für 1.12.2 und älter sowie von 1.13.2 bis zu den 26er-Versionen, NeoForge ab 1.20.2.</p>
           </li>
           <li class="karte">
+            <span class="symbol"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg></span>
+            <h3>Mit Microsoft-Konto anmelden</h3>
+            <p>Melde dich mit dem Microsoft-Konto an, auf dem du Minecraft: Java Edition hast – ganz normal über deinen Browser. Mehrere Konten gehen auch, und auf Wunsch bleibst du angemeldet.</p>
+            <p class="klein">Hat ein Konto kein Minecraft, sagt FUSE dir das deutlich. Ohne Konto geht nur Einzelspieler und LAN – FUSE ersetzt keinen Minecraft-Kauf.</p>
+          </li>
+          <li class="karte">
             <span class="symbol"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9h12v5a5 5 0 0 1-5 5H9a5 5 0 0 1-5-5z"/><path d="M16 11h1.5a2.5 2.5 0 0 1 0 5H16"/><path d="M8 3c0 1.5 1.5 1.5 1.5 3M12 3c0 1.5 1.5 1.5 1.5 3"/></svg></span>
             <h3>Java kommt mit</h3>
             <p>Du musst kein Java installieren. FUSE holt für jede Minecraft-Version genau das Java, das sie braucht.</p>
@@ -798,6 +851,7 @@
             <span class="symbol"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2.5 3.5 7v10l8.5 4.5 8.5-4.5V7z"/><path d="M3.5 7 12 11.5 20.5 7M12 11.5v10"/></svg></span>
             <h3>Mods von Modrinth</h3>
             <p>Mods, Texturenpakete und Shader direkt in FUSE suchen und installieren – mit Bildern, Beschreibungen und Updates auf Knopfdruck. Einzelne Mods kannst du auch einfach ausschalten.</p>
+            <p class="klein">Updates gibt es auch für Texturen und Shader – ein aktives Texturpaket oder ein gewählter Shader bleibt danach ausgewählt.</p>
           </li>
           <li class="karte">
             <span class="symbol"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><path d="M8 13h8"/></svg></span>
@@ -830,11 +884,6 @@
             <p>In den Einstellungen <em>Niedrig</em>, <em>Mittel</em> oder <em>Hoch</em> wählen und anwenden – FUSE stellt die Grafik der Instanz passend ein. Deine Tasten und die Lautstärke bleiben, wie sie sind.</p>
           </li>
           <li class="karte">
-            <span class="symbol"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="6" width="20" height="12" rx="2"/><path d="M6 10h.01M10 10h.01M14 10h.01M18 10h.01M7 14h10"/></svg></span>
-            <h3>Geht auch ohne Maus</h3>
-            <p>WASD oder Pfeiltasten, Enter, Esc, Q und E: FUSE lässt sich auch nur mit der Tastatur bedienen.</p>
-          </li>
-          <li class="karte">
             <span class="symbol"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 7h11l-3-3M17 17H6l3 3"/></svg></span>
             <h3>Java &amp; Bedrock</h3>
             <p>Ein Umschalter zwischen Java und Bedrock Edition. FUSE erkennt Bedrock und startet es über Windows – installieren oder modden kann FUSE Bedrock nicht.</p>
@@ -852,6 +901,7 @@
             <li>Arbeitsspeicher, Fenstergröße und eigene Java-Argumente einstellen</li>
             <li>Protokoll-Reiter: Meldungen gehen nicht verloren</li>
             <li>Minecraft direkt aus FUSE heraus beenden</li>
+            <li>Geht auch ohne Maus: WASD oder Pfeiltasten, Enter, Esc, Q und E</li>
           </ul>
         </div>
       </section>
@@ -869,6 +919,8 @@
               Suchen, auf <strong>Installieren</strong> drücken, fertig. Unter
               <strong>Installiert</strong> siehst du deine Mods mit echtem Namen
               und Bild – und kannst sie dort aus- und wieder einschalten.
+              Texturen und Shader haben dieselbe Ansicht, mit Entfernen und
+              „Auf Updates prüfen“.
             </p>
           </div>
           <div class="einblick-bilder zwei">
@@ -925,11 +977,6 @@
         </div>
         <ul class="ehrlich">
           <li>
-            <h3>Anmelden mit Microsoft-Konto <span class="marke-bald">kommt bald</span></h3>
-            <p>Im Download funktioniert die Anmeldung noch nicht. Bis dahin startest du ohne Konto – das reicht für Einzelspieler und LAN, nicht für Online-Server.</p>
-            <p><strong>Wichtig:</strong> FUSE ersetzt keinen Minecraft-Kauf. Spiel bitte nur, wenn dir Minecraft gehört.</p>
-          </li>
-          <li>
             <h3>Modpacks mit Forge &amp; Co. <span class="marke-nein">noch nicht</span></h3>
             <p>Modpacks gehen bisher nur mit Fabric. Einzelne Mods für Forge, NeoForge und Quilt gehen schon.</p>
           </li>
@@ -958,7 +1005,7 @@
           </li>
           <li>
             <h3>Starten</h3>
-            <p>Im entpackten Ordner <code>FUSELauncher.exe</code> doppelklicken. Solange die Microsoft-Anmeldung fehlt: beim ersten Mal einen Namen eintippen und <span class="knopftext">Ohne Konto spielen</span> drücken.</p>
+            <p>Im entpackten Ordner <code>FUSELauncher.exe</code> doppelklicken und <span class="knopftext">Mit Microsoft anmelden</span> drücken – dein Browser geht auf. Nimm das Konto, auf dem dein Minecraft ist.</p>
           </li>
           <li>
             <h3>Spielen</h3>

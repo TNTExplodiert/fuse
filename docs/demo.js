@@ -316,7 +316,6 @@
   const modSuche = $("#demo-mod-suche");
   const modLeer = $(".demo-leer", modListe);
   const modVanilla = $(".demo-vanilla", modListe);
-  const blendbar = $$(".demo-blendbar", $("#demo-mods"));
   const PLATZHALTER = {
     mod: "Mods suchen",
     textur: "Texturen suchen",
@@ -337,9 +336,12 @@
     const vanilla = mods.art === "mod" && !installiert && loader.value === "Vanilla";
     let zahl = 0;
     for (const karte of modKarten) {
+      // data-fremd: eine Datei, die nur im Ordner liegt – gibt es bei
+      // Modrinth nicht zu suchen, steht also nur unter „Installiert“.
       const zeigen = !vanilla
         && karte.dataset.art === mods.art
         && (!installiert || karte.dataset.installiert === "ja")
+        && (installiert || karte.dataset.fremd !== "ja")
         && (!q || karte.dataset.name.includes(q));
       karte.hidden = !zeigen;
       if (zeigen) zahl++;
@@ -362,16 +364,8 @@
       mods.art = knopf.dataset.art;
       gruppeSetzen(knopf.parentElement, "data-art", mods.art);
       modSuche.placeholder = PLATZHALTER[mods.art];
-      // Im Download gibt es „Installiert“ und Updates nur bei Mods.
-      const nurMods = mods.art === "mod";
-      for (const el of blendbar) {
-        el.classList.toggle("weg", !nurMods);
-        el.inert = !nurMods;
-      }
-      if (!nurMods && mods.ansicht !== "suchen") {
-        mods.ansicht = "suchen";
-        gruppeSetzen($("[data-ansicht]", $("#demo-mods")).parentElement, "data-ansicht", "suchen");
-      }
+      // Seit Bau 76 wie in FUSE: „Installiert“ und „Auf Updates prüfen“
+      // gibt es bei allen drei Arten, die Ansicht bleibt beim Wechsel.
       modsZeigen();
     });
   }
@@ -395,6 +389,8 @@
       const neu = karte.dataset.installiert !== "ja";
       karte.dataset.installiert = neu ? "ja" : "nein";
       install.setAttribute("aria-pressed", neu ? "true" : "false");
+      // Frisch installiert = gleich die neueste Fassung.
+      if (neu) aufNeueDatei(karte);
       if (!neu) {
         karte.classList.remove("aus");
         const a = $(".demo-aus", karte);
@@ -405,6 +401,188 @@
       const istAus = karte.classList.toggle("aus");
       aus.textContent = istAus ? "Anschalten" : "Ausschalten";
     }
+  });
+
+  /* ---------- Beispiel-Fenster „Auf Updates prüfen“ ----------
+     Wie in FUSE ein Fenster für alle drei Arten: oben der Name, darunter
+     klein alte → neue Datei, daneben „Aktualisieren“. Was neuer ist, steht
+     an der Karte (data-neu). Geladen wird nichts – „Aktualisieren“ setzt
+     nur den Dateinamen der Karte um. */
+
+  const updKnopf = $("#demo-upd-knopf");
+  const upd = $("#demo-upd");
+  const updTitel = $("#demo-upd-titel");
+  const updListe = $("#demo-upd-liste");
+  const updHinweis = $("#demo-upd-hinweis");
+  const koerper = $(".demo-koerper");
+  const NICHTS_GELADEN = "Beispieldaten – hier wird nichts geladen. In FUSE tauscht „Aktualisieren“ die Datei aus";
+  const UPD_ARTEN = {
+    mod: {
+      titel: "Mod-Updates", ein: "Mod", viele: "Mods",
+      leer: "In diesem Ordner liegen keine Mods, die FUSE kennt.",
+      hinweis: NICHTS_GELADEN + "."
+    },
+    textur: {
+      titel: "Texturen-Updates", ein: "Texturenpaket", viele: "Texturenpakete",
+      leer: "In diesem Ordner liegen keine Texturenpakete.",
+      hinweis: NICHTS_GELADEN + " – ein aktives Texturpaket bleibt danach ausgewählt."
+    },
+    shader: {
+      titel: "Shader-Updates", ein: "Shader", viele: "Shader",
+      leer: "In diesem Ordner liegen keine Shader.",
+      hinweis: NICHTS_GELADEN + " – ein gewählter Shader bleibt danach ausgewählt."
+    }
+  };
+
+  // Der Dateiname steht in .demo-datei, bei Karten mit Downloads mit „ · “ davor.
+  function dateiVon(karte) {
+    const d = $(".demo-datei", karte);
+    return d ? d.textContent.replace(/^\s*·\s*/, "") : "";
+  }
+
+  // Die Karte bekommt die neuere Datei (nach „Aktualisieren“ oder frisch
+  // installiert) – danach gibt es für sie kein Update mehr.
+  function aufNeueDatei(karte) {
+    const neu = karte.dataset.neu;
+    if (!neu) return;
+    const d = $(".demo-datei", karte);
+    if (d) d.textContent = d.textContent.replace(dateiVon(karte), neu);
+    delete karte.dataset.neu;
+  }
+
+  function updSatz(text, klasse) {
+    const p = document.createElement("p");
+    p.className = "demo-hilfe" + (klasse ? " " + klasse : "");
+    p.textContent = text;
+    return p;
+  }
+
+  function updZeile(name, klein) {
+    const zeile = document.createElement("div");
+    zeile.className = "demo-upd-zeile";
+    const text = document.createElement("div");
+    text.className = "demo-upd-text";
+    const n = document.createElement("span");
+    n.className = "demo-upd-name";
+    n.textContent = name;
+    const k = document.createElement("span");
+    k.className = "demo-upd-klein";
+    k.textContent = klein;
+    k.title = klein;
+    text.append(n, k);
+    zeile.append(text);
+    return { zeile, klein: k };
+  }
+
+  function updAuf() {
+    const art = UPD_ARTEN[mods.art] ? mods.art : "mod";
+    const was = UPD_ARTEN[art];
+    // Wie in FUSE: Ohne Loader (Vanilla) gibt es keine Mods zu prüfen.
+    const ohneLoader = art === "mod" && loader.value === "Vanilla";
+    const drin = ohneLoader ? [] : modKarten.filter((k) => k.dataset.art === art && k.dataset.installiert === "ja");
+    const bekannt = drin.filter((k) => k.dataset.fremd !== "ja");
+    const fremd = drin.filter((k) => k.dataset.fremd === "ja");
+    const neu = bekannt.filter((k) => k.dataset.neu);
+
+    updTitel.textContent = ohneLoader ? was.titel
+      : was.titel + " · " + neu.length + " von " + bekannt.length;
+    updListe.replaceChildren();
+    if (ohneLoader) {
+      updListe.append(updSatz("Ohne Fabric, Quilt, Forge oder NeoForge gibt es keine Mods zu prüfen."));
+    } else if (!neu.length) {
+      if (bekannt.length) {
+        updListe.append(updSatz(bekannt.length === 1
+          ? "Dein " + was.ein + " ist aktuell."
+          : "Alle " + bekannt.length + " " + was.viele + " sind aktuell."));
+      } else if (!fremd.length) {
+        updListe.append(updSatz(was.leer));
+      }
+    }
+    for (const karte of neu) {
+      const alt = dateiVon(karte);
+      const ziel = karte.dataset.neu;
+      const { zeile, klein } = updZeile($("h4", karte).textContent, alt + "  →  " + ziel);
+      const knopf = document.createElement("button");
+      knopf.type = "button";
+      knopf.className = "demo-klein";
+      knopf.textContent = "Aktualisieren";
+      knopf.addEventListener("click", () => {
+        aufNeueDatei(karte);
+        zeile.classList.add("fertig");
+        klein.textContent = klein.title = ziel + " · aktualisiert";
+        knopf.textContent = "Fertig";
+        knopf.disabled = true;
+        // Ein abgeschalteter Knopf verliert den Fokus – er geht aufs ✕.
+        $("#demo-upd-zu").focus();
+      });
+      zeile.append(knopf);
+      updListe.append(zeile);
+    }
+    if (fremd.length) {
+      updListe.append(updSatz("Kein Update-Check möglich:", "demo-upd-ohne-kopf"));
+      for (const karte of fremd) {
+        const { zeile } = updZeile($("h4", karte).textContent,
+          dateiVon(karte) + " · Modrinth kennt diese Datei nicht");
+        zeile.classList.add("ohne");
+        updListe.append(zeile);
+      }
+    }
+    updHinweis.textContent = was.hinweis;
+
+    meldungZu();
+    upd.hidden = false;
+    // Wie ein Fenster in FUSE: dahinter ist nichts bedienbar.
+    koerper.inert = true;
+    const erster = $("button.demo-klein:not(:disabled)", updListe) || $("#demo-upd-zu");
+    erster.focus({ preventScroll: true });
+  }
+
+  function updZu() {
+    if (upd.hidden) return;
+    upd.hidden = true;
+    koerper.inert = false;
+    updKnopf.focus({ preventScroll: true });
+  }
+
+  updKnopf.addEventListener("click", updAuf);
+  $("#demo-upd-zu").addEventListener("click", updZu);
+
+  // Klick auf den dunklen Rand schließt – nur, wenn er dort auch anfing
+  // (sonst schlösse ein Ziehen aus dem Fenster heraus).
+  let druckAufSchatten = false;
+  upd.addEventListener("pointerdown", (e) => {
+    druckAufSchatten = e.target === upd;
+  });
+  upd.addEventListener("click", (e) => {
+    if (druckAufSchatten && e.target === upd) updZu();
+    druckAufSchatten = false;
+  });
+
+  // Esc schließt; Tab bleibt im Fenster.
+  upd.addEventListener("keydown", (e) => {
+    if (e.key === "Escape") {
+      e.preventDefault();
+      e.stopPropagation();
+      updZu();
+      return;
+    }
+    if (e.key !== "Tab") return;
+    const ziele = $$("button:not(:disabled)", upd);
+    const erst = ziele[0];
+    const letzt = ziele[ziele.length - 1];
+    const aktiv = document.activeElement;
+    if (e.shiftKey && (aktiv === erst || !ziele.includes(aktiv))) {
+      e.preventDefault();
+      letzt.focus();
+    } else if (!e.shiftKey && (aktiv === letzt || !ziele.includes(aktiv))) {
+      e.preventDefault();
+      erst.focus();
+    }
+  });
+
+  // Esc auch, wenn der Fokus gerade nirgends steht (z. B. auf <body>).
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape" && !e.isComposing && !upd.hidden) updZu();
   });
 
   /* ---------- Skins ---------- */
