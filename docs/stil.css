@@ -1402,29 +1402,46 @@ h2 {
   stroke-linecap: round;
 }
 
+/* Konto oben rechts – wie in FUSE ein Knopf mit Kopf und Namen, der das
+   Konto-Menü öffnet. Das Menü klebt am Knopf (position: relative). */
+.demo-konto {
+  position: relative;
+  margin-left: auto;
+}
+
 .demo-spieler {
   display: inline-flex;
   align-items: center;
   gap: 10px;
   height: 42px;
-  padding: 4px 12px 4px 4px;
+  padding: 5px 12px 5px 5px;
+  border: 0;
   border-radius: 999px;
   background: var(--bg-2);
   color: var(--text);
   font-weight: 700;
+  transition: background-color var(--t-kurz) ease;
 }
 
-/* Neutrale Kachel statt Spielerkopf. */
-.demo-kopfbild {
-  display: grid;
-  place-items: center;
-  width: 34px;
-  height: 34px;
+.demo-spieler:hover,
+.demo-spieler[aria-expanded="true"] {
+  background: var(--bg-3);
+}
+
+.demo-spieler:focus-visible {
+  border-radius: 999px;
+}
+
+/* Steves Kopf aus dem Skin: 8×8 Pixel auf 32 – ohne Glätten, sonst Matsch.
+   Rund wie in FUSE. */
+.demo-kopfbild,
+.demo-konto-kopf {
+  flex: none;
+  width: 32px;
+  height: 32px;
   border-radius: 50%;
-  background: linear-gradient(135deg, #4a5262, #343a46);
-  color: var(--text);
-  font-size: 15px;
-  font-weight: 800;
+  background: var(--bg-3);
+  image-rendering: pixelated;
 }
 
 .demo-spieler svg {
@@ -1435,6 +1452,110 @@ h2 {
   stroke-width: 2.2;
   stroke-linecap: round;
   stroke-linejoin: round;
+  transition: transform var(--t-mittel) var(--kurve);
+}
+
+.demo-spieler[aria-expanded="true"] svg {
+  transform: rotate(180deg);
+}
+
+/* Liegt über dem Inhalt (auch über der Meldung, z-index 5). */
+.demo-konto-menue {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  z-index: 7;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 240px;
+  padding: 6px;
+  border: 1px solid var(--rand);
+  border-radius: 14px;
+  background: var(--bg-2);
+  box-shadow: 0 18px 40px rgba(0, 0, 0, .5);
+}
+
+.demo-konto-liste {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding-bottom: 6px;
+  margin-bottom: 4px;
+  border-bottom: 1px solid var(--rand);
+}
+
+.demo-konto-eintrag {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  min-height: 40px;
+  padding: 8px 12px;
+  border: 0;
+  border-radius: 10px;
+  background: transparent;
+  color: var(--text);
+  font-size: 14px;
+  text-align: left;
+  transition: background-color var(--t-kurz) ease, color var(--t-kurz) ease;
+}
+
+.demo-konto-eintrag:hover,
+.demo-konto-eintrag:focus-visible {
+  background: var(--bg-3);
+}
+
+.demo-konto-eintrag:focus-visible {
+  outline-offset: -2px;
+  border-radius: 10px;
+}
+
+.demo-konto-weg:hover,
+.demo-konto-weg:focus-visible {
+  background: rgba(226, 59, 59, .16);
+  color: var(--akzent-2);
+}
+
+.demo-konto-eintrag svg {
+  flex: none;
+  width: 16px;
+  height: 16px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.demo-konto-kopf {
+  width: 24px;
+  height: 24px;
+  margin: -2px 0;
+}
+
+.demo-konto-eintrag[aria-checked="true"] {
+  font-weight: 700;
+}
+
+/* Das aktive Konto: Haken rechts, wie in FUSE. */
+.demo-konto-eintrag .demo-konto-haken {
+  margin-left: auto;
+  color: var(--gut);
+  stroke-width: 2.4;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .demo-konto-menue:not([hidden]) {
+    animation: demo-konto-rein 160ms var(--kurve);
+  }
+
+  @keyframes demo-konto-rein {
+    from {
+      opacity: 0;
+      transform: translateY(-6px);
+    }
+  }
 }
 
 .demo-bereiche {
@@ -1879,16 +2000,16 @@ h2 {
   letter-spacing: .3px;
 }
 
-.k-sand { background: #d8c6a2; color: #3b2f1a; }
-.k-gruen { background: #5fbf6a; color: #0d2a12; }
-.k-bunt { background: linear-gradient(135deg, #e2556b, #e9a23b 35%, #3fb59a 65%, #5a7be0); color: #fff; text-shadow: 0 1px 2px rgba(0, 0, 0, .45); }
+/* Das echte Icon des Projekts von Modrinth (bilder/icons/, 96×96). */
+.demo-icon {
+  display: block;
+  object-fit: cover;
+  background: var(--bg-3);
+}
+
+/* Nur noch für Dateien, die bloß im Ordner liegen – Modrinth kennt sie
+   nicht, also gibt es kein Bild (wie in FUSE). */
 .k-grau { background: #646c7c; color: #fff; }
-.k-gelb { background: #e3df6a; color: #2b2a06; }
-.k-lila { background: #8a63d2; color: #fff; }
-.k-orange { background: #e58a3a; color: #2d1604; }
-.k-tuerkis { background: #2fb3a6; color: #04211e; }
-.k-rosa { background: #d65f93; color: #fff; }
-.k-dunkelblau { background: #3a5aa0; color: #fff; }
 
 .demo-mod-text {
   min-width: 0;
@@ -2140,54 +2261,16 @@ h2 {
   transform: translateY(-2px);
 }
 
-/* Bilder sind nur Farbverläufe – keine Spielgrafik. */
+/* Echte Screenshots aus Minecraft (bilder/spiel/, 480 und 960 breit). */
 .demo-foto-bild {
   display: block;
+  width: 100%;
+  height: auto;
   aspect-ratio: 16 / 9;
+  object-fit: cover;
   margin-bottom: 2px;
   border-radius: 6px;
-}
-
-.b-abend {
-  background:
-    radial-gradient(circle at 70% 62%, #ffd27a 0 7%, transparent 8%),
-    linear-gradient(180deg, transparent 66%, #3b2a3f 66%),
-    linear-gradient(180deg, #4b3a78, #c55b6a 55%, #f29a5e);
-}
-
-.b-meer {
-  background:
-    linear-gradient(180deg, transparent 58%, #2a6fa0 58%, #184a73),
-    linear-gradient(180deg, #7cc3ee, #c4e6f7);
-}
-
-.b-nacht {
-  background:
-    radial-gradient(circle at 22% 28%, #fff 0 1.2%, transparent 1.6%),
-    radial-gradient(circle at 64% 18%, #fff 0 1%, transparent 1.4%),
-    radial-gradient(circle at 82% 36%, #dfe7ff 0 1.3%, transparent 1.7%),
-    radial-gradient(circle at 76% 24%, #f4f1d0 0 6%, transparent 6.5%),
-    linear-gradient(180deg, transparent 70%, #151a2b 70%),
-    linear-gradient(180deg, #0c1230, #26305e);
-}
-
-.b-wald {
-  background:
-    linear-gradient(180deg, transparent 52%, #3e8a4f 52%, #24603a),
-    linear-gradient(180deg, #a6d8ef, #e3f2e0);
-}
-
-.b-morgen {
-  background:
-    radial-gradient(circle at 24% 70%, #fff3c4 0 8%, transparent 9%),
-    linear-gradient(180deg, transparent 72%, #5a6f8f 72%, #3e4f6b),
-    linear-gradient(180deg, #f6c6a8, #f3e1c9 60%, #d9e6f2);
-}
-
-.b-wueste {
-  background:
-    linear-gradient(180deg, transparent 60%, #e2bf7a 60%, #c99a52),
-    linear-gradient(180deg, #8fc7ea, #d8eef7);
+  background: var(--bg-3);
 }
 
 .demo-foto-name {
@@ -2217,15 +2300,15 @@ h2 {
 
 .demo-skin-liste {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(96px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(84px, 1fr));
   gap: 10px;
 }
 
 .demo-skin {
   display: grid;
   justify-items: center;
-  gap: 8px;
-  padding: 14px 8px 10px;
+  gap: 6px;
+  padding: 10px 6px 8px;
   border: 1px solid var(--rand);
   border-radius: 10px;
   background: var(--bg-2);
@@ -2244,23 +2327,17 @@ h2 {
   color: var(--text);
 }
 
-/* Farben der Beispiel-Figuren (eigene Gliederpuppe, kein Skin). */
-.farbe-rot { --hemd: #d84444; --hose: #3a3f4b; }
-.farbe-blau { --hemd: #4a7fd6; --hose: #2d3340; }
-.farbe-gruen { --hemd: #35b874; --hose: #2b4237; }
-
-.mini-figur {
-  display: grid;
-  justify-items: center;
+/* Skins sind Pixelbilder (8 Bildpunkte je Skin-Pixel): nie glätten.
+   In der Sammlung 2 px je Skin-Pixel, in der Vorschau 8 px. */
+.demo-skin img,
+.demo-figur img {
+  image-rendering: pixelated;
 }
 
-.mini-figur i {
-  display: block;
+.demo-skin img {
+  width: 32px;
+  height: 64px;
 }
-
-.mini-figur i:nth-child(1) { width: 16px; height: 16px; border-radius: 3px; background: #c9cfd8; }
-.mini-figur i:nth-child(2) { width: 26px; height: 22px; background: var(--hemd); }
-.mini-figur i:nth-child(3) { width: 16px; height: 20px; background: var(--hose); }
 
 .demo-skin-vorschau {
   display: grid;
@@ -2272,77 +2349,74 @@ h2 {
 .demo-figur-platz {
   display: grid;
   place-items: center;
-  height: 250px;
+  height: 292px;
   border-radius: 12px;
   background:
-    radial-gradient(ellipse 30% 6% at 50% 90%, rgba(0, 0, 0, .5), transparent),
+    radial-gradient(ellipse 30% 5% at 50% 94%, rgba(0, 0, 0, .5), transparent),
     var(--bg-2);
+  overflow: hidden;
 }
 
+/* 16 × 32 Skin-Pixel, je 8 px. Die Elytra-Ebene ist 28 Skin-Pixel breit
+   und beginnt 6 links neben der Figur (siehe skins_bauen.py). */
 .demo-figur {
   position: relative;
-  width: 112px;
-  height: 216px;
+  width: 128px;
+  height: 256px;
 }
 
-.demo-figur > span {
+.demo-figur img {
   position: absolute;
-  transition: transform var(--t-mittel) var(--kurve), width var(--t-mittel) ease, left var(--t-mittel) ease, opacity var(--t-mittel) ease;
+  top: 0;
+  left: 0;
+  max-width: none;
+  transition: transform var(--t-mittel) var(--kurve), opacity var(--t-mittel) ease;
 }
 
-.f-kopf { left: 32px; top: 0; width: 48px; height: 48px; border-radius: 6px; background: #c9cfd8; box-shadow: inset 0 -6px 0 rgba(0, 0, 0, .1); }
-.f-koerper { left: 32px; top: 50px; width: 48px; height: 70px; border-radius: 3px; background: var(--hemd); }
-.f-arm { top: 50px; width: 22px; height: 70px; border-radius: 3px; background: var(--hemd); filter: brightness(.86); }
-.f-al { left: 8px; }
-.f-ar { left: 82px; }
-.f-bein { top: 122px; width: 23px; height: 92px; border-radius: 3px; background: var(--hose); }
-.f-bl { left: 32px; }
-.f-br { left: 57px; }
-
-/* Slim: schmalere Arme. */
-.demo-figur.schmal .f-arm { width: 17px; }
-.demo-figur.schmal .f-al { left: 13px; }
-
-/* Schild (neutral, eigene Form) und Flügel (Elytra) zum Anprobieren. */
-.f-schild {
-  left: -6px;
-  top: 74px;
-  width: 34px;
-  height: 46px;
-  border-radius: 4px 4px 16px 16px;
-  border: 3px solid #4b5363;
-  background: linear-gradient(135deg, #8a93a3, #69717f);
+.demo-figur .demo-figur-elytra {
+  left: -48px;
+  width: 224px;
+  height: 256px;
   opacity: 0;
 }
 
-.f-fluegel {
-  top: 46px;
-  width: 54px;
-  height: 120px;
-  background: linear-gradient(180deg, #8d95a6, #5d6574);
+.demo-figur-beine,
+.demo-figur-oben {
+  width: 128px;
+  height: 256px;
+}
+
+/* Dasselbe Bild zweimal: oben Kopf, Körper und Arme (20 Skin-Pixel),
+   unten die Beine (12). */
+.demo-figur-oben {
+  clip-path: inset(0 0 96px 0);
+}
+
+.demo-figur-beine {
+  clip-path: inset(160px 0 0 0);
+}
+
+/* Schild wie beim Blocken vor dem Körper, in der linken Hand
+   (vom Betrachter aus rechts). 12 × 22 Schild-Pixel zu je 6 px. */
+.demo-figur .demo-figur-schild {
+  top: 68px;
+  left: 44px;
+  width: 72px;
+  height: 132px;
   opacity: 0;
 }
 
-.f-fl { left: -14px; clip-path: polygon(100% 0, 0 12%, 16% 100%, 100% 70%); }
-.f-fr { left: 72px; clip-path: polygon(0 0, 100% 12%, 84% 100%, 0 70%); }
-
-.demo-figur.schild .f-schild,
-.demo-figur.fluegel .f-fluegel {
+.demo-figur.fluegel .demo-figur-elytra,
+.demo-figur.schild .demo-figur-schild {
   opacity: 1;
 }
 
-/* Schleichen: Oberkörper geht runter, Beine knicken. */
-.demo-figur.schleicht .f-kopf,
-.demo-figur.schleicht .f-koerper,
-.demo-figur.schleicht .f-arm,
-.demo-figur.schleicht .f-schild,
-.demo-figur.schleicht .f-fluegel {
-  transform: translateY(12px);
-}
-
-.demo-figur.schleicht .f-bein {
-  transform: translateY(12px) scaleY(.87);
-  transform-origin: top;
+/* Schleichen: alles über der Hüfte geht 3 Skin-Pixel nach unten und
+   schiebt sich vor die Beine – wie von vorn im Spiel. */
+.demo-figur.schleicht .demo-figur-oben,
+.demo-figur.schleicht .demo-figur-elytra,
+.demo-figur.schleicht .demo-figur-schild {
+  transform: translateY(24px);
 }
 
 .demo-anprobe {
@@ -2673,10 +2747,6 @@ h2 {
 @media (max-width: 959px) {
   .demo-skins {
     grid-template-columns: minmax(0, 1fr) minmax(0, 250px);
-  }
-
-  .demo-figur-platz {
-    height: 230px;
   }
 }
 

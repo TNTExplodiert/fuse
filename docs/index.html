@@ -58,7 +58,7 @@
     <div class="huelle">
 
       <section class="held" aria-labelledby="titel">
-        <img class="held-logo" src="icon.svg" width="88" height="88" alt="FUSE-Logo: ein weißer Blitz auf rotem Grund">
+        <img class="held-logo" src="icon.svg" width="88" height="88" alt="FUSE-Logo: ein weißer Blitz-Umriss auf rotem Grund">
         <p class="etikett">Minecraft-Launcher für Windows</p>
         <h1 id="titel">FUSE</h1>
         <p class="einleitung">
@@ -91,7 +91,12 @@
            Skins › Anziehen und Server › Play erklären das so, dazu
            „Angemeldet bleiben“ unter Einstellungen › Launcher.
            Ohne JavaScript: nur „Spielen“ sichtbar + Hinweis.
-           Unter 760 px: statt der Vorschau das echte Bild (.demo-handy). -->
+           Unter 760 px: statt der Vorschau das echte Bild (.demo-handy).
+           Bilder (seit 12.10.2026, TNTs Wunsch: nichts Selbstgemaltes mehr):
+           bilder/icons/ = echte Icons der Projekte von Modrinth (einmal
+           geladen), bilder/spiel/ = echte Screenshots aus Minecraft,
+           bilder/skins/ = Standard-Skins, Elytra und Schild aus dem
+           Minecraft-Client. Konto oben rechts: „Steve“ mit Konto-Menü. -->
       <section id="ausprobieren" class="abschnitt abschnitt-demo" aria-labelledby="demo-titel">
         <div class="abschnitt-kopf">
           <p class="etikett">Live-Vorschau</p>
@@ -183,11 +188,33 @@
                     <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8h.01"/></svg>
                     Beispieldaten – nur zum Anschauen
                   </p>
-                  <p class="demo-spieler">
-                    <span class="demo-kopfbild" aria-hidden="true">S</span>
-                    <span>Spieler</span>
-                    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
-                  </p>
+                  <!-- Konto wie in FUSE: Kopf aus dem Skin (Steve, 8×8 Gesicht +
+                       Hut-Ebene), Klick öffnet das Konto-Menü. Abmelden und
+                       Konto hinzufügen gehen nur im echten FUSE (demo.js). -->
+                  <div class="demo-konto">
+                    <button class="demo-spieler" type="button" id="demo-konto-knopf">
+                      <img class="demo-kopfbild" src="bilder/skins/steve-kopf.png" width="32" height="32" alt="">
+                      <span>Steve</span>
+                      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
+                    </button>
+                    <div class="demo-konto-menue" id="demo-konto-menue" role="menu" aria-label="Konten" hidden>
+                      <div class="demo-konto-liste" role="group" aria-label="Angemeldet">
+                        <button class="demo-konto-eintrag" type="button" role="menuitemradio" aria-checked="true" tabindex="-1">
+                          <img class="demo-konto-kopf" src="bilder/skins/steve-kopf.png" width="24" height="24" alt="">
+                          <span>Steve</span>
+                          <svg class="demo-konto-haken" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12.5 9.5 18 20 6.5"/></svg>
+                        </button>
+                      </div>
+                      <button class="demo-konto-eintrag" type="button" role="menuitem" data-konto="hinzufuegen" tabindex="-1">
+                        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>
+                        Konto hinzufügen
+                      </button>
+                      <button class="demo-konto-eintrag demo-konto-weg" type="button" role="menuitem" data-konto="abmelden" tabindex="-1">
+                        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><path d="m16 17 5-5-5-5"/><path d="M21 12H9"/></svg>
+                        Abmelden
+                      </button>
+                    </div>
+                  </div>
                 </div>
 
                 <div class="demo-bereiche">
@@ -288,12 +315,15 @@
                     </div>
 
                     <div class="demo-liste" id="demo-mod-liste" tabindex="-1">
+                      <!-- Bilder: die echten Icons der Projekte auf Modrinth (einmal geladen,
+                           liegen als 96×96-WebP in bilder/icons/ – nichts kommt zur Laufzeit
+                           von Modrinth). Downloadzahlen von Modrinth, Stand 12.10.2026. -->
                       <article class="demo-mod" data-art="mod" data-name="fabric api" data-installiert="ja">
-                        <span class="demo-kachel k-sand" aria-hidden="true">FA</span>
+                        <img class="demo-kachel demo-icon" src="bilder/icons/fabric-api.webp" width="44" height="44" alt="Fabric API" loading="lazy" decoding="async">
                         <div class="demo-mod-text">
                           <h4>Fabric API</h4>
                           <p>Die Grundlage, die fast jede Fabric-Mod braucht.</p>
-                          <p class="demo-meta">271.446.849 Downloads<span class="demo-datei"> · fabric-api-0.136.1+1.21.8.jar</span></p>
+                          <p class="demo-meta">276.485.923 Downloads<span class="demo-datei"> · fabric-api-0.136.1+1.21.8.jar</span></p>
                         </div>
                         <div class="demo-mod-knoepfe">
                           <button class="demo-klein demo-aus" type="button">Ausschalten</button>
@@ -301,11 +331,11 @@
                         </div>
                       </article>
                       <article class="demo-mod" data-art="mod" data-name="sodium" data-installiert="ja">
-                        <span class="demo-kachel k-gruen" aria-hidden="true">SO</span>
+                        <img class="demo-kachel demo-icon" src="bilder/icons/sodium.webp" width="44" height="44" alt="Sodium" loading="lazy" decoding="async">
                         <div class="demo-mod-text">
                           <h4>Sodium</h4>
                           <p>Macht Minecraft deutlich flüssiger – mehr FPS.</p>
-                          <p class="demo-meta">239.449.960 Downloads<span class="demo-datei"> · sodium-fabric-0.7.3+mc1.21.8.jar</span></p>
+                          <p class="demo-meta">243.546.679 Downloads<span class="demo-datei"> · sodium-fabric-0.7.3+mc1.21.8.jar</span></p>
                         </div>
                         <div class="demo-mod-knoepfe">
                           <button class="demo-klein demo-aus" type="button">Ausschalten</button>
@@ -313,11 +343,11 @@
                         </div>
                       </article>
                       <article class="demo-mod" data-art="mod" data-name="iris shaders" data-installiert="nein">
-                        <span class="demo-kachel k-bunt" aria-hidden="true">IS</span>
+                        <img class="demo-kachel demo-icon" src="bilder/icons/iris.webp" width="44" height="44" alt="Iris Shaders" loading="lazy" decoding="async">
                         <div class="demo-mod-text">
                           <h4>Iris Shaders</h4>
                           <p>Damit laufen Shader-Pakete – passt zu Sodium.</p>
-                          <p class="demo-meta">186.198.617 Downloads<span class="demo-datei"> · iris-fabric-1.9.6+mc1.21.8.jar</span></p>
+                          <p class="demo-meta">189.207.161 Downloads<span class="demo-datei"> · iris-fabric-1.9.6+mc1.21.8.jar</span></p>
                         </div>
                         <div class="demo-mod-knoepfe">
                           <button class="demo-klein demo-aus" type="button">Ausschalten</button>
@@ -325,11 +355,11 @@
                         </div>
                       </article>
                       <article class="demo-mod" data-art="mod" data-name="entity culling" data-installiert="nein">
-                        <span class="demo-kachel k-grau" aria-hidden="true">EC</span>
+                        <img class="demo-kachel demo-icon" src="bilder/icons/entityculling.webp" width="44" height="44" alt="Entity Culling" loading="lazy" decoding="async">
                         <div class="demo-mod-text">
                           <h4>Entity Culling</h4>
                           <p>Zeichnet nur, was du wirklich sehen kannst.</p>
-                          <p class="demo-meta">176.665.925 Downloads<span class="demo-datei"> · entityculling-fabric-1.8.2-mc1.21.8.jar</span></p>
+                          <p class="demo-meta">180.967.439 Downloads<span class="demo-datei"> · entityculling-fabric-1.8.2-mc1.21.8.jar</span></p>
                         </div>
                         <div class="demo-mod-knoepfe">
                           <button class="demo-klein demo-aus" type="button">Ausschalten</button>
@@ -337,11 +367,11 @@
                         </div>
                       </article>
                       <article class="demo-mod" data-art="mod" data-name="cloth config api" data-installiert="ja">
-                        <span class="demo-kachel k-gelb" aria-hidden="true">CC</span>
+                        <img class="demo-kachel demo-icon" src="bilder/icons/cloth-config.webp" width="44" height="44" alt="Cloth Config API" loading="lazy" decoding="async">
                         <div class="demo-mod-text">
                           <h4>Cloth Config API</h4>
                           <p>Einstellungs-Bildschirme für andere Mods.</p>
-                          <p class="demo-meta">175.930.148 Downloads<span class="demo-datei"> · cloth-config-19.0.147-fabric.jar</span></p>
+                          <p class="demo-meta">178.672.297 Downloads<span class="demo-datei"> · cloth-config-19.0.147-fabric.jar</span></p>
                         </div>
                         <div class="demo-mod-knoepfe">
                           <button class="demo-klein demo-aus" type="button">Ausschalten</button>
@@ -349,11 +379,11 @@
                         </div>
                       </article>
                       <article class="demo-mod" data-art="mod" data-name="mod menu" data-installiert="nein">
-                        <span class="demo-kachel k-lila" aria-hidden="true">MM</span>
+                        <img class="demo-kachel demo-icon" src="bilder/icons/modmenu.webp" width="44" height="44" alt="Mod Menu" loading="lazy" decoding="async">
                         <div class="demo-mod-text">
                           <h4>Mod Menu</h4>
                           <p>Zeigt im Spiel alle Mods und ihre Einstellungen.</p>
-                          <p class="demo-meta">120.384.519 Downloads<span class="demo-datei"> · modmenu-15.0.0.jar</span></p>
+                          <p class="demo-meta">154.613.563 Downloads<span class="demo-datei"> · modmenu-15.0.0.jar</span></p>
                         </div>
                         <div class="demo-mod-knoepfe">
                           <button class="demo-klein demo-aus" type="button">Ausschalten</button>
@@ -363,38 +393,39 @@
 
                       <!-- Texturen/Shader: Dateiname und Update-Beispiel (data-neu =
                            neuere Datei bei „Auf Updates prüfen“). Wie in FUSE ohne
-                           An/Aus-Schalter. data-fremd = liegt nur im Ordner. -->
-                      <article class="demo-mod" data-art="textur" data-name="faithful 32x" data-installiert="ja">
-                        <span class="demo-kachel k-orange" aria-hidden="true">F3</span>
-                        <div class="demo-mod-text">
-                          <h4>Faithful 32x</h4>
-                          <p>Die bekannten Texturen, nur doppelt so scharf.</p>
-                          <p class="demo-meta">25.412.880 Downloads<span class="demo-datei"> · Faithful 32x - 1.21.8.zip</span></p>
-                        </div>
-                        <div class="demo-mod-knoepfe">
-                          <button class="demo-install" type="button" aria-pressed="true"><span class="t-neu">Installieren</span><span class="t-an">Installiert</span><span class="t-weg">Entfernen</span></button>
-                        </div>
-                      </article>
+                           An/Aus-Schalter. data-fremd = liegt nur im Ordner – die behält
+                           ihre Buchstaben-Kachel, wie in FUSE (Modrinth kennt sie nicht). -->
                       <article class="demo-mod" data-art="textur" data-name="fresh animations" data-installiert="ja" data-neu="FreshAnimations_v1.10.zip">
-                        <span class="demo-kachel k-tuerkis" aria-hidden="true">FR</span>
+                        <img class="demo-kachel demo-icon" src="bilder/icons/fresh-animations.webp" width="44" height="44" alt="Fresh Animations" loading="lazy" decoding="async">
                         <div class="demo-mod-text">
                           <h4>Fresh Animations</h4>
                           <p>Tiere und Monster bewegen sich lebendiger.</p>
-                          <p class="demo-meta">18.940.311 Downloads<span class="demo-datei"> · FreshAnimations_v1.9.3.zip</span></p>
+                          <p class="demo-meta">49.768.557 Downloads<span class="demo-datei"> · FreshAnimations_v1.9.3.zip</span></p>
                         </div>
                         <div class="demo-mod-knoepfe">
                           <button class="demo-install" type="button" aria-pressed="true"><span class="t-neu">Installieren</span><span class="t-an">Installiert</span><span class="t-weg">Entfernen</span></button>
                         </div>
                       </article>
-                      <article class="demo-mod" data-art="textur" data-name="stay true" data-installiert="nein">
-                        <span class="demo-kachel k-rosa" aria-hidden="true">ST</span>
+                      <article class="demo-mod" data-art="textur" data-name="motschens better leaves" data-installiert="nein">
+                        <img class="demo-kachel demo-icon" src="bilder/icons/better-leaves.webp" width="44" height="44" alt="Motschen's Better Leaves" loading="lazy" decoding="async">
                         <div class="demo-mod-text">
-                          <h4>Stay True</h4>
-                          <p>Natürlichere Blöcke, nah am Original.</p>
-                          <p class="demo-meta">6.205.774 Downloads<span class="demo-datei"> · Stay-True-1.21.8.zip</span></p>
+                          <h4>Motschen's Better Leaves</h4>
+                          <p>Buschigere, schönere Blätter an allen Bäumen.</p>
+                          <p class="demo-meta">21.023.243 Downloads<span class="demo-datei"> · Better-Leaves-9.6.zip</span></p>
                         </div>
                         <div class="demo-mod-knoepfe">
                           <button class="demo-install" type="button" aria-pressed="false"><span class="t-neu">Installieren</span><span class="t-an">Installiert</span><span class="t-weg">Entfernen</span></button>
+                        </div>
+                      </article>
+                      <article class="demo-mod" data-art="textur" data-name="faithful 32x" data-installiert="ja">
+                        <img class="demo-kachel demo-icon" src="bilder/icons/faithful-32x.webp" width="44" height="44" alt="Faithful 32x" loading="lazy" decoding="async">
+                        <div class="demo-mod-text">
+                          <h4>Faithful 32x</h4>
+                          <p>Die bekannten Texturen, nur doppelt so scharf.</p>
+                          <p class="demo-meta">5.126.217 Downloads<span class="demo-datei"> · Faithful 32x - 1.21.8.zip</span></p>
+                        </div>
+                        <div class="demo-mod-knoepfe">
+                          <button class="demo-install" type="button" aria-pressed="true"><span class="t-neu">Installieren</span><span class="t-an">Installiert</span><span class="t-weg">Entfernen</span></button>
                         </div>
                       </article>
                       <article class="demo-mod" data-art="textur" data-name="rotes pvp paket" data-installiert="ja" data-fremd="ja">
@@ -409,34 +440,34 @@
                         </div>
                       </article>
 
-                      <article class="demo-mod" data-art="shader" data-name="complementary reimagined" data-installiert="ja" data-neu="ComplementaryReimagined_r5.6.zip">
-                        <span class="demo-kachel k-dunkelblau" aria-hidden="true">CR</span>
+                      <article class="demo-mod" data-art="shader" data-name="complementary shaders reimagined" data-installiert="ja" data-neu="ComplementaryReimagined_r5.6.zip">
+                        <img class="demo-kachel demo-icon" src="bilder/icons/complementary-reimagined.webp" width="44" height="44" alt="Complementary Shaders – Reimagined" loading="lazy" decoding="async">
                         <div class="demo-mod-text">
-                          <h4>Complementary Reimagined</h4>
+                          <h4>Complementary Shaders – Reimagined</h4>
                           <p>Warmes Licht, schöne Wolken und Wasser.</p>
-                          <p class="demo-meta">14.802.196 Downloads<span class="demo-datei"> · ComplementaryReimagined_r5.5.zip</span></p>
+                          <p class="demo-meta">70.181.719 Downloads<span class="demo-datei"> · ComplementaryReimagined_r5.5.zip</span></p>
                         </div>
                         <div class="demo-mod-knoepfe">
                           <button class="demo-install" type="button" aria-pressed="true"><span class="t-neu">Installieren</span><span class="t-an">Installiert</span><span class="t-weg">Entfernen</span></button>
                         </div>
                       </article>
                       <article class="demo-mod" data-art="shader" data-name="bsl shaders" data-installiert="nein">
-                        <span class="demo-kachel k-orange" aria-hidden="true">BS</span>
+                        <img class="demo-kachel demo-icon" src="bilder/icons/bsl-shaders.webp" width="44" height="44" alt="BSL Shaders" loading="lazy" decoding="async">
                         <div class="demo-mod-text">
                           <h4>BSL Shaders</h4>
                           <p>Klassischer Look mit weichem Licht.</p>
-                          <p class="demo-meta">9.711.402 Downloads<span class="demo-datei"> · BSL_v10.0.zip</span></p>
+                          <p class="demo-meta">30.809.700 Downloads<span class="demo-datei"> · BSL_v10.0.zip</span></p>
                         </div>
                         <div class="demo-mod-knoepfe">
                           <button class="demo-install" type="button" aria-pressed="false"><span class="t-neu">Installieren</span><span class="t-an">Installiert</span><span class="t-weg">Entfernen</span></button>
                         </div>
                       </article>
                       <article class="demo-mod" data-art="shader" data-name="makeup ultra fast" data-installiert="nein">
-                        <span class="demo-kachel k-gruen" aria-hidden="true">MU</span>
+                        <img class="demo-kachel demo-icon" src="bilder/icons/makeup-ultra-fast.webp" width="44" height="44" alt="MakeUp – Ultra Fast" loading="lazy" decoding="async">
                         <div class="demo-mod-text">
                           <h4>MakeUp – Ultra Fast</h4>
                           <p>Leichte Shader, laufen auch auf schwachen PCs.</p>
-                          <p class="demo-meta">4.380.957 Downloads<span class="demo-datei"> · MakeUp-UltraFast-9.4.zip</span></p>
+                          <p class="demo-meta">13.584.414 Downloads<span class="demo-datei"> · MakeUp-UltraFast-9.4.zip</span></p>
                         </div>
                         <div class="demo-mod-knoepfe">
                           <button class="demo-install" type="button" aria-pressed="false"><span class="t-neu">Installieren</span><span class="t-an">Installiert</span><span class="t-weg">Entfernen</span></button>
@@ -531,40 +562,45 @@
                   <!-- ===== Screenshots ===== -->
                   <div class="demo-bereich" role="tabpanel" id="demo-fotos" aria-labelledby="demo-tab-fotos" tabindex="0" hidden>
                     <div class="demo-werkzeug">
-                      <h3 class="demo-titel">Screenshots · <span class="demo-instanzname">Standard</span> (6)</h3>
+                      <h3 class="demo-titel">Screenshots · <span class="demo-instanzname">Standard</span> (7)</h3>
                       <button class="demo-klein" type="button" data-info="In FUSE liest das die Screenshots der Instanz neu ein.">Neu laden</button>
                       <button class="demo-klein" type="button" data-info="In FUSE öffnet das den screenshots-Ordner im Explorer.">Ordner öffnen</button>
                     </div>
                     <div class="demo-liste demo-fotos">
                       <button class="demo-foto" type="button" data-info="In FUSE öffnet ein Klick das Bild groß.">
-                        <span class="demo-foto-bild b-abend" aria-hidden="true"></span>
-                        <span class="demo-foto-name">2026-10-09_18.42.07.png</span>
-                        <span class="demo-zeile-klein">09.10.2026 18:42 · 812 KB</span>
+                        <img class="demo-foto-bild" src="bilder/spiel/2026-10-12_22.46.41-480.webp" srcset="bilder/spiel/2026-10-12_22.46.41-480.webp 480w, bilder/spiel/2026-10-12_22.46.41-960.webp 960w" sizes="(min-width: 1120px) 190px, 26vw" width="480" height="270" loading="lazy" decoding="async" alt="Korallenriff unter Wasser">
+                        <span class="demo-foto-name">2026-10-12_22.46.41.png</span>
+                        <span class="demo-zeile-klein">12.10.2026 22:46 · 964 KB</span>
                       </button>
                       <button class="demo-foto" type="button" data-info="In FUSE öffnet ein Klick das Bild groß.">
-                        <span class="demo-foto-bild b-meer" aria-hidden="true"></span>
-                        <span class="demo-foto-name">2026-10-08_15.10.44.png</span>
-                        <span class="demo-zeile-klein">08.10.2026 15:10 · 1.024 KB</span>
+                        <img class="demo-foto-bild" src="bilder/spiel/2026-10-12_22.43.42-480.webp" srcset="bilder/spiel/2026-10-12_22.43.42-480.webp 480w, bilder/spiel/2026-10-12_22.43.42-960.webp 960w" sizes="(min-width: 1120px) 190px, 26vw" width="480" height="270" loading="lazy" decoding="async" alt="Ein Dorf bei Nacht, darüber Mond und Sterne">
+                        <span class="demo-foto-name">2026-10-12_22.43.42.png</span>
+                        <span class="demo-zeile-klein">12.10.2026 22:43 · 824 KB</span>
                       </button>
                       <button class="demo-foto" type="button" data-info="In FUSE öffnet ein Klick das Bild groß.">
-                        <span class="demo-foto-bild b-nacht" aria-hidden="true"></span>
-                        <span class="demo-foto-name">2026-10-05_21.03.19.png</span>
-                        <span class="demo-zeile-klein">05.10.2026 21:03 · 655 KB</span>
+                        <img class="demo-foto-bild" src="bilder/spiel/2026-10-12_22.43.09-480.webp" srcset="bilder/spiel/2026-10-12_22.43.09-480.webp 480w, bilder/spiel/2026-10-12_22.43.09-960.webp 960w" sizes="(min-width: 1120px) 190px, 26vw" width="480" height="270" loading="lazy" decoding="async" alt="Ein Dorf im Sonnenuntergang">
+                        <span class="demo-foto-name">2026-10-12_22.43.09.png</span>
+                        <span class="demo-zeile-klein">12.10.2026 22:43 · 1366 KB</span>
                       </button>
                       <button class="demo-foto" type="button" data-info="In FUSE öffnet ein Klick das Bild groß.">
-                        <span class="demo-foto-bild b-wald" aria-hidden="true"></span>
-                        <span class="demo-foto-name">2026-10-02_16.27.51.png</span>
-                        <span class="demo-zeile-klein">02.10.2026 16:27 · 930 KB</span>
+                        <img class="demo-foto-bild" src="bilder/spiel/2026-10-12_22.42.21-480.webp" srcset="bilder/spiel/2026-10-12_22.42.21-480.webp 480w, bilder/spiel/2026-10-12_22.42.21-960.webp 960w" sizes="(min-width: 1120px) 190px, 26vw" width="480" height="270" loading="lazy" decoding="async" alt="Wald mit Klippe, See und Strand, von oben">
+                        <span class="demo-foto-name">2026-10-12_22.42.21.png</span>
+                        <span class="demo-zeile-klein">12.10.2026 22:42 · 1543 KB</span>
                       </button>
                       <button class="demo-foto" type="button" data-info="In FUSE öffnet ein Klick das Bild groß.">
-                        <span class="demo-foto-bild b-morgen" aria-hidden="true"></span>
-                        <span class="demo-foto-name">2026-09-28_07.55.02.png</span>
-                        <span class="demo-zeile-klein">28.09.2026 07:55 · 702 KB</span>
+                        <img class="demo-foto-bild" src="bilder/spiel/2026-10-12_22.41.21-480.webp" srcset="bilder/spiel/2026-10-12_22.41.21-480.webp 480w, bilder/spiel/2026-10-12_22.41.21-960.webp 960w" sizes="(min-width: 1120px) 190px, 26vw" width="480" height="270" loading="lazy" decoding="async" alt="Blumenwiese mit Schafen am Waldrand">
+                        <span class="demo-foto-name">2026-10-12_22.41.21.png</span>
+                        <span class="demo-zeile-klein">12.10.2026 22:41 · 1021 KB</span>
                       </button>
                       <button class="demo-foto" type="button" data-info="In FUSE öffnet ein Klick das Bild groß.">
-                        <span class="demo-foto-bild b-wueste" aria-hidden="true"></span>
-                        <span class="demo-foto-name">2026-09-21_13.18.36.png</span>
-                        <span class="demo-zeile-klein">21.09.2026 13:18 · 864 KB</span>
+                        <img class="demo-foto-bild" src="bilder/spiel/2026-10-12_22.40.31-480.webp" srcset="bilder/spiel/2026-10-12_22.40.31-480.webp 480w, bilder/spiel/2026-10-12_22.40.31-960.webp 960w" sizes="(min-width: 1120px) 190px, 26vw" width="480" height="270" loading="lazy" decoding="async" alt="Sonnenaufgang über Kirschblütenbäumen und einem Fluss">
+                        <span class="demo-foto-name">2026-10-12_22.40.31.png</span>
+                        <span class="demo-zeile-klein">12.10.2026 22:40 · 1235 KB</span>
+                      </button>
+                      <button class="demo-foto" type="button" data-info="In FUSE öffnet ein Klick das Bild groß.">
+                        <img class="demo-foto-bild" src="bilder/spiel/2026-10-12_22.39.47-480.webp" srcset="bilder/spiel/2026-10-12_22.39.47-480.webp 480w, bilder/spiel/2026-10-12_22.39.47-960.webp 960w" sizes="(min-width: 1120px) 190px, 26vw" width="480" height="270" loading="lazy" decoding="async" alt="Wüstendorf am Meer, daneben rote Badlands-Hügel">
+                        <span class="demo-foto-name">2026-10-12_22.39.47.png</span>
+                        <span class="demo-zeile-klein">12.10.2026 22:39 · 1041 KB</span>
                       </button>
                     </div>
                     <ul class="demo-tipps" aria-label="Erklärung zu „Screenshots“">
@@ -582,20 +618,33 @@
                           <button class="demo-klein" type="button" data-info="In FUSE öffnet das den Skin-Editor in einem eigenen Fenster: malen mit Zoom und farbiger Vorlage.">Malen</button>
                           <button class="demo-klein" type="button" data-info="In FUSE wählst du hier eine Skin-Datei (PNG) aus. FUSE prüft sie und zeigt sie gleich in der Vorschau – speichern kannst du sie dann im Mal-Fenster.">Datei laden</button>
                         </div>
-                        <div class="demo-skin-liste" role="group" aria-label="Beispiel-Skins">
-                          <button class="demo-skin" type="button" data-farbe="rot" aria-pressed="true"><span class="mini-figur farbe-rot" aria-hidden="true"><i></i><i></i><i></i></span>Rot</button>
-                          <button class="demo-skin" type="button" data-farbe="blau" aria-pressed="false"><span class="mini-figur farbe-blau" aria-hidden="true"><i></i><i></i><i></i></span>Blau</button>
-                          <button class="demo-skin" type="button" data-farbe="gruen" aria-pressed="false"><span class="mini-figur farbe-gruen" aria-hidden="true"><i></i><i></i><i></i></span>Grün</button>
+                        <!-- Die Standard-Skins aus Minecraft selbst (aus der Client-.jar,
+                             Vorderansicht pixelgenau: Grundschicht + zweite Ebene,
+                             8 Bildpunkte je Skin-Pixel). Classic = 4 Pixel breite
+                             Arme, Slim = 3. -->
+                        <div class="demo-skin-liste" role="group" aria-label="Standard-Skins aus Minecraft">
+                          <button class="demo-skin" type="button" data-skin="steve" data-koerper="breit" aria-pressed="true"><img src="bilder/skins/steve-classic.png" width="32" height="64" alt="" loading="lazy" decoding="async">Steve</button>
+                          <button class="demo-skin" type="button" data-skin="alex" data-koerper="schmal" aria-pressed="false"><img src="bilder/skins/alex-slim.png" width="32" height="64" alt="" loading="lazy" decoding="async">Alex</button>
+                          <button class="demo-skin" type="button" data-skin="ari" data-koerper="breit" aria-pressed="false"><img src="bilder/skins/ari-classic.png" width="32" height="64" alt="" loading="lazy" decoding="async">Ari</button>
+                          <button class="demo-skin" type="button" data-skin="efe" data-koerper="breit" aria-pressed="false"><img src="bilder/skins/efe-classic.png" width="32" height="64" alt="" loading="lazy" decoding="async">Efe</button>
+                          <button class="demo-skin" type="button" data-skin="kai" data-koerper="breit" aria-pressed="false"><img src="bilder/skins/kai-classic.png" width="32" height="64" alt="" loading="lazy" decoding="async">Kai</button>
+                          <button class="demo-skin" type="button" data-skin="makena" data-koerper="breit" aria-pressed="false"><img src="bilder/skins/makena-classic.png" width="32" height="64" alt="" loading="lazy" decoding="async">Makena</button>
+                          <button class="demo-skin" type="button" data-skin="noor" data-koerper="breit" aria-pressed="false"><img src="bilder/skins/noor-classic.png" width="32" height="64" alt="" loading="lazy" decoding="async">Noor</button>
+                          <button class="demo-skin" type="button" data-skin="sunny" data-koerper="breit" aria-pressed="false"><img src="bilder/skins/sunny-classic.png" width="32" height="64" alt="" loading="lazy" decoding="async">Sunny</button>
+                          <button class="demo-skin" type="button" data-skin="zuri" data-koerper="breit" aria-pressed="false"><img src="bilder/skins/zuri-classic.png" width="32" height="64" alt="" loading="lazy" decoding="async">Zuri</button>
                         </div>
                       </div>
                       <div class="demo-skin-vorschau">
                         <div class="demo-figur-platz">
-                          <div class="demo-figur farbe-rot" id="demo-figur" role="img" aria-label="Vorschau des gewählten Beispiel-Skins">
-                            <span class="f-fluegel f-fl"></span><span class="f-fluegel f-fr"></span>
-                            <span class="f-bein f-bl"></span><span class="f-bein f-br"></span>
-                            <span class="f-arm f-al"></span><span class="f-arm f-ar"></span>
-                            <span class="f-koerper"></span><span class="f-kopf"></span>
-                            <span class="f-schild"></span>
+                          <!-- Vorderansicht des gewählten Skins. Dasselbe Bild zweimal:
+                               oben (Kopf, Körper, Arme) und unten (Beine) – so kann
+                               sich die Figur beim Schleichen ducken. Elytra und
+                               Schild: die echten Texturen aus Minecraft. -->
+                          <div class="demo-figur" id="demo-figur">
+                            <img class="demo-figur-elytra" src="bilder/skins/elytra.png" width="224" height="256" alt="" loading="lazy" decoding="async">
+                            <img class="demo-figur-beine" src="bilder/skins/steve-classic.png" width="128" height="256" alt="" loading="lazy" decoding="async">
+                            <img class="demo-figur-oben" id="demo-figur-bild" src="bilder/skins/steve-classic.png" width="128" height="256" alt="Vorschau: Steve, Classic" loading="lazy" decoding="async">
+                            <img class="demo-figur-schild" src="bilder/skins/schild.png" width="72" height="132" alt="" loading="lazy" decoding="async">
                           </div>
                         </div>
                         <div class="demo-anprobe" role="group" aria-label="Anprobieren">
@@ -1072,6 +1121,7 @@
         <p><strong>Nicht offiziell. Nicht von Mojang oder Microsoft.</strong></p>
         <p>FUSE ist kein offizielles Minecraft-Produkt und hat nichts mit Mojang oder Microsoft zu tun. „Minecraft“ ist eine Marke von Mojang bzw. Microsoft.</p>
         <p>Auf den Bildern sind die Editions-Symbole aus FUSE durch schlichte Platzhalter („J“ und „B“) ersetzt.</p>
+        <p>In der Live-Vorschau: die Bilder der Mods, Texturen und Shader stammen von den jeweiligen Projekten auf Modrinth, die Skins (Steve, Alex und die anderen Standard-Skins), Elytra und Schild aus Minecraft, die Screenshots sind selbst im Spiel aufgenommen.</p>
         <p>Diese Seite setzt keine Cookies, hat kein Tracking und lädt nichts von fremden Servern.</p>
       </div>
     </div>

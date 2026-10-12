@@ -106,10 +106,11 @@
 
   /* ---------- Hauptleiste ---------- */
 
-  // Bereichswechsel: Meldung und Editions-Menü (unten) gehen zu.
+  // Bereichswechsel: Meldung, Editions-Menü und Konto-Menü (unten) gehen zu.
   reiterEinrichten($(".demo-reiter"), () => {
     meldungZu();
     menueZu();
+    kontoZu();
   });
 
   /* ---------- Spielen ---------- */
@@ -200,6 +201,7 @@
   function menueAuf() {
     if (menueOffen()) return;
     meldungZu();
+    kontoZu("lassen");
     edMenue.hidden = false;
     spielenTab.setAttribute("aria-expanded", "true");
     // Der Fokus geht auf die gewählte Edition.
@@ -307,6 +309,121 @@
 
   $("#demo-start").addEventListener("click", (e) => {
     melden("In der Demo startet nichts – lad FUSE runter, dann geht’s richtig los.", true, e.currentTarget);
+  });
+
+  /* ---------- Konto-Menü (oben rechts) ----------
+     Wie in FUSE: Klick auf das Konto öffnet ein Menü mit dem aktiven Konto,
+     „Konto hinzufügen“ und „Abmelden“. Beides geht nur im echten FUSE –
+     hier kommt dafür eine Meldung mit Download-Knopf. ↑/↓ (oder W/S),
+     Pos1/Ende wandern, Enter/Leertaste wählt; Esc, Klick daneben und Tab
+     hinaus schließen. */
+
+  const kontoKnopf = $("#demo-konto-knopf");
+  const kontoMenue = $("#demo-konto-menue");
+  const kontoEintraege = $$('[role="menuitem"], [role="menuitemradio"]', kontoMenue);
+  const NUR_IM_ECHTEN = {
+    hinzufuegen: "Konto hinzufügen geht nur im echten FUSE – dort meldest du dich mit deinem Microsoft-Konto an.",
+    abmelden: "Abmelden geht nur im echten FUSE – hier in der Vorschau bist du immer Steve."
+  };
+
+  // Erst mit Skript gibt es das Menü – deshalb setzt es auch erst das Skript an.
+  kontoKnopf.setAttribute("aria-haspopup", "menu");
+  kontoKnopf.setAttribute("aria-expanded", "false");
+  kontoKnopf.setAttribute("aria-controls", "demo-konto-menue");
+
+  const kontoOffen = () => !kontoMenue.hidden;
+
+  function kontoAuf(welcher) {
+    if (kontoOffen()) return;
+    meldungZu();
+    menueZu("lassen");
+    kontoMenue.hidden = false;
+    kontoKnopf.setAttribute("aria-expanded", "true");
+    const ziel = welcher === "letzter" ? kontoEintraege[kontoEintraege.length - 1] : kontoEintraege[0];
+    ziel.focus({ preventScroll: true });
+  }
+
+  // fokus wie beim Editions-Menü: "zurueck" = auf den Konto-Knopf,
+  // "lassen" = nicht anfassen; sonst nur zurück, wenn er im Menü stand.
+  function kontoZu(fokus) {
+    if (!kontoOffen()) return;
+    const drin = kontoMenue.contains(document.activeElement);
+    kontoMenue.hidden = true;
+    kontoKnopf.setAttribute("aria-expanded", "false");
+    if (fokus === "zurueck" || (drin && fokus !== "lassen")) {
+      kontoKnopf.focus({ preventScroll: true });
+    }
+  }
+
+  kontoKnopf.addEventListener("click", () => {
+    if (kontoOffen()) kontoZu("zurueck");
+    else kontoAuf();
+  });
+
+  kontoKnopf.addEventListener("keydown", (e) => {
+    if (e.key === "ArrowDown" || e.key === "ArrowUp") {
+      e.preventDefault();
+      kontoZu("lassen");
+      kontoAuf(e.key === "ArrowUp" ? "letzter" : "erster");
+    }
+  });
+
+  kontoMenue.addEventListener("click", (e) => {
+    const eintrag = e.target.closest('[role="menuitem"], [role="menuitemradio"]');
+    if (!eintrag) return;
+    kontoZu("zurueck");
+    // Das aktive Konto (Steve) ist schon gewählt – da passiert nichts.
+    const was = eintrag.dataset.konto;
+    if (NUR_IM_ECHTEN[was]) melden(NUR_IM_ECHTEN[was], true, kontoKnopf);
+  });
+
+  kontoMenue.addEventListener("keydown", (e) => {
+    if (e.ctrlKey || e.metaKey || e.altKey || e.isComposing) return;
+    const taste = e.key.length === 1 ? e.key.toLowerCase() : e.key;
+    const i = kontoEintraege.indexOf(document.activeElement);
+    const n = kontoEintraege.length;
+    let ziel = null;
+    if (taste === "ArrowDown" || taste === "s") ziel = kontoEintraege[(i + 1) % n];
+    else if (taste === "ArrowUp" || taste === "w") ziel = kontoEintraege[(i - 1 + n) % n];
+    else if (taste === "Home") ziel = kontoEintraege[0];
+    else if (taste === "End") ziel = kontoEintraege[n - 1];
+    else if (taste === "Escape") {
+      // stopPropagation: Esc schließt nur das Menü, nicht auch die Meldung.
+      e.preventDefault();
+      e.stopPropagation();
+      kontoZu("zurueck");
+      return;
+    }
+    if (ziel) {
+      e.preventDefault();
+      ziel.focus();
+    }
+  });
+
+  // Mit Tab oder Umschalt+Tab hinaus: zu, der Fokus bleibt, wo er hinwollte.
+  kontoMenue.addEventListener("focusout", (e) => {
+    const neu = e.relatedTarget;
+    if (neu && !kontoMenue.contains(neu)) kontoZu("lassen");
+  });
+
+  // Klick daneben (überall auf der Seite): zu. Der Knopf selbst schaltet oben um.
+  document.addEventListener("pointerdown", (e) => {
+    if (!kontoOffen()) return;
+    const ziel = e.target;
+    if (ziel instanceof Node && (kontoMenue.contains(ziel) || kontoKnopf.contains(ziel))) return;
+    kontoZu();
+  }, true);
+
+  // Bei offenem Menü darf der Mausdruck auf den Knopf den Fokus nicht aus
+  // dem Menü ziehen – sonst schlösse „Tab hinaus“ es, und der Klick öffnete es neu.
+  kontoKnopf.addEventListener("mousedown", (e) => {
+    if (kontoOffen()) e.preventDefault();
+  });
+
+  // Esc auch dann, wenn der Fokus nicht im Menü steht.
+  document.addEventListener("keydown", (e) => {
+    if (e.key !== "Escape" || e.isComposing || !kontoOffen()) return;
+    kontoZu("zurueck");
   });
 
   /* ---------- Mods, Texturen, Shader ---------- */
@@ -585,15 +702,40 @@
     if (e.key === "Escape" && !e.isComposing && !upd.hidden) updZu();
   });
 
-  /* ---------- Skins ---------- */
+  /* ---------- Skins ----------
+     Die Standard-Skins aus Minecraft als fertige Vorderansichten
+     (bilder/skins/<name>-classic.png bzw. -slim.png). Jeder Skin merkt
+     sich seine Körperform; Classic/Slim stellt sie beim gewählten um. */
 
   const figur = $("#demo-figur");
+  const figurBild = $("#demo-figur-bild");
+  const figurBeine = $(".demo-figur-beine", figur);
+  const skinListe = $(".demo-skin-liste");
+  const skinKarten = $$(".demo-skin", skinListe);
+  const formKnoepfe = $$(".demo-seg[data-form]");
+  const FORM = {
+    breit: { datei: "classic", name: "Classic" },
+    schmal: { datei: "slim", name: "Slim" }
+  };
+  const ANPROBE = { schild: "mit Schild", fluegel: "mit Elytra", schleicht: "schleicht" };
+  let skinKarte = skinKarten.find((k) => k.getAttribute("aria-pressed") === "true") || skinKarten[0];
 
-  for (const knopf of $$("[data-farbe]")) {
-    knopf.addEventListener("click", () => {
-      figur.classList.remove("farbe-rot", "farbe-blau", "farbe-gruen");
-      figur.classList.add("farbe-" + knopf.dataset.farbe);
-      gruppeSetzen(knopf.parentElement, "data-farbe", knopf.dataset.farbe);
+  function skinZeigen() {
+    const form = FORM[skinKarte.dataset.koerper] ? skinKarte.dataset.koerper : "breit";
+    const bild = "bilder/skins/" + skinKarte.dataset.skin + "-" + FORM[form].datei + ".png";
+    $("img", skinKarte).src = bild;
+    figurBild.src = bild;
+    figurBeine.src = bild;
+    const dazu = Object.keys(ANPROBE).filter((k) => figur.classList.contains(k)).map((k) => ANPROBE[k]);
+    figurBild.alt = ["Vorschau: " + skinKarte.textContent.trim(), FORM[form].name].concat(dazu).join(", ");
+    gruppeSetzen(skinListe, "data-skin", skinKarte.dataset.skin);
+    if (formKnoepfe.length) gruppeSetzen(formKnoepfe[0].parentElement, "data-form", form);
+  }
+
+  for (const karte of skinKarten) {
+    karte.addEventListener("click", () => {
+      skinKarte = karte;
+      skinZeigen();
     });
   }
 
@@ -601,13 +743,14 @@
     knopf.addEventListener("click", () => {
       const an = figur.classList.toggle(knopf.dataset.anprobe);
       knopf.setAttribute("aria-pressed", an ? "true" : "false");
+      skinZeigen();
     });
   }
 
-  for (const knopf of $$("[data-form]")) {
+  for (const knopf of formKnoepfe) {
     knopf.addEventListener("click", () => {
-      figur.classList.toggle("schmal", knopf.dataset.form === "schmal");
-      gruppeSetzen(knopf.parentElement, "data-form", knopf.dataset.form);
+      skinKarte.dataset.koerper = knopf.dataset.form;
+      skinZeigen();
     });
   }
 
@@ -664,5 +807,6 @@
 
   startAuffrischen();
   modsZeigen();
+  skinZeigen();
   logZeigen();
 })();
