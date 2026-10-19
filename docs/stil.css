@@ -2789,3 +2789,32 @@ h2 {
     display: none;
   }
 }
+
+/* Rechtsseiten (impressum, datenschutz, nutzungsbedingungen) + Hinweis an den Download-Knoepfen */
+.hinweis-mitte { text-align: center; }
+.hinweis-bedingungen a { color: var(--akzent-2); }
+.rechtstext {
+  max-width: 820px;
+  padding-top: 40px;
+  padding-bottom: 64px;
+  line-height: 1.65;
+}
+.rechtstext h1 { font-size: clamp(28px, 4vw, 38px); margin: 8px 0 18px; text-wrap: balance; }
+.rechtstext h2 { font-size: 22px; margin: 34px 0 10px; text-wrap: balance; }
+.rechtstext h2.titel-zweit { font-size: clamp(24px, 3.4vw, 32px); margin-top: 8px; }
+.rechtstext h3 { font-size: 18px; margin: 26px 0 8px; }
+.rechtstext h4 { font-size: 16px; margin: 20px 0 6px; color: var(--text-3); }
+.rechtstext p, .rechtstext li { color: var(--text); }
+.rechtstext p { margin: 0 0 12px; }
+.rechtstext ul, .rechtstext ol { padding-left: 22px; }
+.rechtstext li + li { margin-top: 6px; }
+.rechtstext li > p { margin: 8px 0; }
+.rechtstext li > ul, .rechtstext li > ol { margin: 6px 0; }
+.rechtstext a { color: var(--akzent-2); overflow-wrap: anywhere; }
+.rechtstext code { font-family: var(--mono); font-size: .92em; background: var(--bg-3); padding: 1px 5px; border-radius: 5px; overflow-wrap: anywhere; }
+.rechtstext hr { border: 0; border-top: 1px solid var(--rand); margin: 48px 0; }
+.rechtstext .tabelle { overflow-x: auto; margin: 14px 0; border: 1px solid var(--rand); border-radius: 10px; }
+.rechtstext table { border-collapse: collapse; width: 100%; font-size: 14px; }
+.rechtstext th, .rechtstext td { text-align: left; vertical-align: top; padding: 9px 12px; border-bottom: 1px solid var(--rand); }
+.rechtstext th { background: var(--bg-2); color: var(--text-3); font-weight: 600; }
+.rechtstext tr:last-child td { border-bottom: 0; }
